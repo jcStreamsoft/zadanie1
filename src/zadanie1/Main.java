@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		
-		System.out.println(calculateCurrency(new BigDecimal(1),"eur","thb"));
+		System.out.println(calculateCurrency(new BigDecimal(1),"pln","thb"));
 	}
 	public static BigDecimal getCurrencyRate(String currencyCode) throws IOException {
 		
@@ -39,14 +39,18 @@ public class Main {
 		return bd;
 	}
 	public static BigDecimal calculateCurrency(BigDecimal value,String oldCurrency,String newCurrency) throws IOException {
-		
 		BigDecimal result;
-		BigDecimal oldRate = getCurrencyRate(oldCurrency);
+		
 		BigDecimal newRate = getCurrencyRate(newCurrency);
-		
-		result = value.multiply(oldRate);
-		result = result.divide(newRate, 5,RoundingMode.HALF_UP);
-		
+		if(oldCurrency.equalsIgnoreCase("pln")) {
+			result = value.divide(newRate, 5,RoundingMode.HALF_UP);
+			
+		}else {
+			BigDecimal oldRate = getCurrencyRate(oldCurrency);
+			result = value.multiply(oldRate);
+			result = result.divide(newRate, 5,RoundingMode.HALF_UP);
+		}
+	
 		return result;
 	}
 	public static BigDecimal tmpParser(String line) {
