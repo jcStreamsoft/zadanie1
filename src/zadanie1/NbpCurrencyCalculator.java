@@ -56,8 +56,8 @@ public class NbpCurrencyCalculator {
 		return result;
 	}
 	public static BigDecimal tmpParser(String line) {
-		String value="0";
-		String str[]=line.split(":");
+		String value = "0";
+		String str[] = line.split(":");
 		value = str[str.length-1].substring(0, str[str.length-1].length() - 3);
 		BigDecimal result= new BigDecimal(value);
 		return result;
