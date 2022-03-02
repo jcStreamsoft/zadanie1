@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException,CurrencyNotFoundException {
 		
-		BigDecimal result=NbpCurrencyCalculator.calculateCurrency(new BigDecimal(1),"eur","pln");
+		BigDecimal result=NbpCurrencyCalculator.calculateCurrency(new BigDecimal(123.24),"usd","pln");
 		System.out.println(result);
 	}
 	

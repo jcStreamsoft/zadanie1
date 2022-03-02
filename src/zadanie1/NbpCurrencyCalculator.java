@@ -4,9 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+
+
 
 public class NbpCurrencyCalculator {
 	final static String nbpAdress= "http://api.nbp.pl/api/exchangerates/rates/a/";
@@ -24,11 +32,19 @@ public class NbpCurrencyCalculator {
 			}
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+	
 			
 			String currentLine;				
 			while((currentLine=br.readLine())!=null) {
-				currencyRate=tmpParser(currentLine);
+				//currencyRate=tmpParser(currentLine);
+				JSONObject json = new JSONObject(new JSONTokener(currentLine.toString()));
+				JSONArray jsa = json.getJSONArray("rates");
+				JSONObject jb = jsa.getJSONObject(0);
+				currencyRate = jb.getBigDecimal("mid");
+				
+				
 			}
+			
 							
 		}catch(CurrencyNotFoundException e){
 			e.printStackTrace();
@@ -40,13 +56,16 @@ public class NbpCurrencyCalculator {
 	public static BigDecimal calculateCurrency(BigDecimal value,String oldCurrencyCode,String newCurrencyCode) throws IOException,CurrencyNotFoundException {
 		BigDecimal result;
 		
-		if(oldCurrencyCode.equalsIgnoreCase("pln")) {
+		if(oldCurrencyCode.equalsIgnoreCase(newCurrencyCode)) {
+			return value;
+		}else if(oldCurrencyCode.equalsIgnoreCase("pln")) {
 			BigDecimal newRate = getCurrencyRate(newCurrencyCode);
 			result = value.divide(newRate, 5,RoundingMode.HALF_UP);
 			
 		}else if(newCurrencyCode.equalsIgnoreCase("pln")){
 			BigDecimal oldRate = getCurrencyRate(oldCurrencyCode);
 			result = value.multiply(oldRate);
+			result = result.setScale(4, RoundingMode.HALF_UP);
 		}else {
 			BigDecimal newRate = getCurrencyRate(newCurrencyCode);
 			BigDecimal oldRate = getCurrencyRate(oldCurrencyCode);
