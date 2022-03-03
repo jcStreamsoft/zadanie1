@@ -1,21 +1,23 @@
 package zadanie1;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.time.LocalDate;
+
+import zadanie1.model.Currency;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException,CurrencyNotFoundException {
-		
-		BigDecimal result=NbpCurrencyCalculator.calculateCurrency(new BigDecimal(123.24),"usd","pln");
+	public static void main(String[] args) throws IOException, CurrencyNotFoundException {
+		BigDecimal value = new BigDecimal(123.24);
+		NbpCurrencyCalculator npb = new NbpCurrencyCalculator();
+		BigDecimal result = npb.calculateCurrency(value, "usd", "pln");
 		System.out.println(result);
+
+		CurrencyCalculator cc = new CurrencyCalculator.Builder()
+				.value(new BigDecimal(0))
+				.time(LocalDate.now())
+				.currency(Currency.EUR).build();
 	}
-	
-	
+
 }

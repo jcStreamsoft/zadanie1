@@ -8,18 +8,22 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+import zadanie1.model.Currency;
+import zadanie1.model.Response;
 
 public class NbpCurrencyCalculator {
-	final static String nbpAdress= "http://api.nbp.pl/api/exchangerates/rates/a/";
+	final  String nbpAdress= "http://api.nbp.pl/api/exchangerates/rates/a/";
 	
-	public static BigDecimal getCurrencyRate(String currencyCode)  throws IOException {
+	public  BigDecimal getCurrencyRate(String currencyCode)  throws IOException {
 		BigDecimal currencyRate=new BigDecimal(0);
 		URL url = new URL(nbpAdress + currencyCode );
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -32,15 +36,12 @@ public class NbpCurrencyCalculator {
 			}
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-	
-			String currentLine;				
-			while((currentLine=br.readLine())!=null) {
-				JSONObject jsonResponse = new JSONObject(new JSONTokener(currentLine.toString()));
-				JSONArray jsonArray = jsonResponse.getJSONArray("rates");
-				JSONObject jsonRate = jsonArray.getJSONObject(0);
-				currencyRate = jsonRate.getBigDecimal("mid");
-				
-			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Response rs = mapper.readValue(con.getInputStream(), Response.class);
+			System.out.println(rs.toString());
+			currencyRate=rs.getRates().get(0).getMid();
 							
 		}catch(CurrencyNotFoundException e){
 			e.printStackTrace();
@@ -49,7 +50,7 @@ public class NbpCurrencyCalculator {
 		}
 		return currencyRate;
 	}
-	public static BigDecimal calculateCurrency(BigDecimal value,String oldCurrencyCode,String newCurrencyCode) throws IOException,CurrencyNotFoundException {
+	public  BigDecimal calculateCurrency(BigDecimal value,String oldCurrencyCode,String newCurrencyCode) throws IOException,CurrencyNotFoundException {
 		BigDecimal result;
 		
 		if(oldCurrencyCode.equalsIgnoreCase(newCurrencyCode)) {
@@ -61,7 +62,7 @@ public class NbpCurrencyCalculator {
 		}else if(newCurrencyCode.equalsIgnoreCase("pln")){
 			BigDecimal oldRate = getCurrencyRate(oldCurrencyCode);
 			result = value.multiply(oldRate);
-			result = result.setScale(4, RoundingMode.HALF_UP);
+			result = result.setScale(5, RoundingMode.HALF_UP);
 		}else {
 			BigDecimal newRate = getCurrencyRate(newCurrencyCode);
 			BigDecimal oldRate = getCurrencyRate(oldCurrencyCode);
@@ -70,6 +71,20 @@ public class NbpCurrencyCalculator {
 		}
 		return result;
 	}
+	public BigDecimal calculateToPln(BigDecimal value,Currency currencyCode) {
+		//get value
+			// connect  * no connection,
+			// get json/xml
+			// read currency rate
+			// return currency rate
+		
+		// calculate
+			// calculate and return value
+		
+		return null;
+	}
+	public BigDecimal calculateFromPln(BigDecimal value,Currency currencyCode) {
+		return null;
+	}
 	
-
 }
