@@ -33,18 +33,14 @@ public class NbpCurrencyCalculator {
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 	
-			
 			String currentLine;				
 			while((currentLine=br.readLine())!=null) {
-				//currencyRate=tmpParser(currentLine);
-				JSONObject json = new JSONObject(new JSONTokener(currentLine.toString()));
-				JSONArray jsa = json.getJSONArray("rates");
-				JSONObject jb = jsa.getJSONObject(0);
-				currencyRate = jb.getBigDecimal("mid");
-				
+				JSONObject jsonResponse = new JSONObject(new JSONTokener(currentLine.toString()));
+				JSONArray jsonArray = jsonResponse.getJSONArray("rates");
+				JSONObject jsonRate = jsonArray.getJSONObject(0);
+				currencyRate = jsonRate.getBigDecimal("mid");
 				
 			}
-			
 							
 		}catch(CurrencyNotFoundException e){
 			e.printStackTrace();
@@ -74,12 +70,6 @@ public class NbpCurrencyCalculator {
 		}
 		return result;
 	}
-	public static BigDecimal tmpParser(String line) {
-		String value = "0";
-		String str[] = line.split(":");
-		value = str[str.length-1].substring(0, str[str.length-1].length() - 3);
-		BigDecimal result= new BigDecimal(value);
-		return result;
-	}
+	
 
 }
