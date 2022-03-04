@@ -2,10 +2,17 @@ package zadanie1.model;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 public class Response {
+	@JacksonXmlProperty(localName = "Table")
 	char table;
+	@JacksonXmlProperty( localName = "Currency")
 	String currency;
+	@JacksonXmlProperty( localName = "Code")
 	String code;
+	@JacksonXmlProperty( localName = "Rates")
 	ArrayList<Rate> rates;
 	
 	public Response() {
