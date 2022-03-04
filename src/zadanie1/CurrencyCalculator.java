@@ -3,7 +3,7 @@ package zadanie1;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import zadanie1.model.Currency;
+import zadanie1.enums.Currency;
 
 public class CurrencyCalculator {
 	

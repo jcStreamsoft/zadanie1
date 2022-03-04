@@ -8,83 +8,92 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.jdi.connect.spi.Connection;
 
-import zadanie1.model.Currency;
+import zadanie1.enums.Currency;
+import zadanie1.enums.ResponseType;
+import zadanie1.exceptions.CurrencyNotFoundException;
 import zadanie1.model.Response;
 
 public class NbpCurrencyCalculator {
-	final  String nbpAdress= "http://api.nbp.pl/api/exchangerates/rates/a/";
-	
-	public  BigDecimal getCurrencyRate(String currencyCode)  throws IOException {
-		BigDecimal currencyRate=new BigDecimal(0);
-		URL url = new URL(nbpAdress + currencyCode );
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	private final String nbpAdress = "http://api.nbp.pl/api/exchangerates/rates/a/";
+
+	private HttpURLConnection currentConnection;
+
+	public void getConnection(Currency currency,LocalDate localDate,ResponseType responseType){
+		
 		try {
-			con.setRequestMethod("GET");
-			int responseCode = con.getResponseCode();
+			URL url = new URL(nbpAdress + currency.getCode() + "/" + localDate.toString() + "/?format="+responseType.getType());
 			
-			if(responseCode != 200) {
+			System.out.println(url);
+			currentConnection = (HttpURLConnection) url.openConnection();
+			currentConnection.setRequestMethod("GET");
+			int responseCode = currentConnection.getResponseCode();
+
+			if (responseCode != 200) {
 				throw new CurrencyNotFoundException();
 			}
-			
-			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-			
-			ObjectMapper mapper = new ObjectMapper();
-			
-			Response rs = mapper.readValue(con.getInputStream(), Response.class);
-			System.out.println(rs.toString());
-			currencyRate=rs.getRates().get(0).getMid();
-							
-		}catch(CurrencyNotFoundException e){
+		} catch (CurrencyNotFoundException e) {
 			e.printStackTrace();
-		}finally {
-			con.disconnect();
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
+
+	}
+
+	public BigDecimal getCurrencyRate(ResponseType responseType) throws StreamReadException, DatabindException, IOException {
+		
+		Response rs = new ObjectMapper().readValue(currentConnection.getInputStream(), Response.class);
+		System.out.println(rs.toString());
+		
+		BigDecimal currencyRate  = rs.getRates().get(0).getMid();
+		
 		return currencyRate;
 	}
-	public  BigDecimal calculateCurrency(BigDecimal value,String oldCurrencyCode,String newCurrencyCode) throws IOException,CurrencyNotFoundException {
-		BigDecimal result;
+	
+	public BigDecimal calculateCurrency(BigDecimal value, Currency currency,ResponseType responseType) throws StreamReadException, DatabindException, IOException {
+		getConnection(currency,LocalDate.now().minusDays(1),responseType);
+		BigDecimal rate=getCurrencyRate(responseType);
+		BigDecimal result = value.multiply(rate);
 		
-		if(oldCurrencyCode.equalsIgnoreCase(newCurrencyCode)) {
-			return value;
-		}else if(oldCurrencyCode.equalsIgnoreCase("pln")) {
-			BigDecimal newRate = getCurrencyRate(newCurrencyCode);
-			result = value.divide(newRate, 5,RoundingMode.HALF_UP);
-			
-		}else if(newCurrencyCode.equalsIgnoreCase("pln")){
-			BigDecimal oldRate = getCurrencyRate(oldCurrencyCode);
-			result = value.multiply(oldRate);
-			result = result.setScale(5, RoundingMode.HALF_UP);
-		}else {
-			BigDecimal newRate = getCurrencyRate(newCurrencyCode);
-			BigDecimal oldRate = getCurrencyRate(oldCurrencyCode);
-			result = value.multiply(oldRate);
-			result = result.divide(newRate, 5,RoundingMode.HALF_UP);
-		}
+		System.out.println(currentConnection.getResponseCode());
+		return result;
+		
+	}
+
+	public BigDecimal calculateToPln(BigDecimal value, Currency currency,ResponseType responseType,LocalDate date)  throws StreamReadException, DatabindException, IOException{
+		getConnection(currency,date,responseType);
+		BigDecimal rate=getCurrencyRate(responseType);
+		BigDecimal result = value.multiply(rate);
+		currentConnection.disconnect();
+		System.out.println("wynik"+result);
 		return result;
 	}
-	public BigDecimal calculateToPln(BigDecimal value,Currency currencyCode) {
-		//get value
-			// connect  * no connection,
-			// get json/xml
-			// read currency rate
-			// return currency rate
-		
-		// calculate
-			// calculate and return value
-		
-		return null;
+	public BigDecimal calculateToPln(BigDecimal value, Currency currency,ResponseType responseType)  throws StreamReadException, DatabindException, IOException{
+		return calculateToPln(value,currency,responseType,LocalDate.now().minusDays(1));
 	}
-	public BigDecimal calculateFromPln(BigDecimal value,Currency currencyCode) {
-		return null;
+
+	public BigDecimal calculateFromPln(BigDecimal value, Currency currency,ResponseType responseType,LocalDate date)  throws StreamReadException, DatabindException, IOException{
+		getConnection(currency,date,responseType);
+		BigDecimal rate=getCurrencyRate(responseType);
+		BigDecimal result = value.divide(rate,RoundingMode.CEILING);
+		
+		currentConnection.disconnect();
+		return result;
 	}
-	
+	public BigDecimal calculateFromPln(BigDecimal value, Currency currency,ResponseType responseType)  throws StreamReadException, DatabindException, IOException{
+		return calculateFromPln(value,currency,responseType,LocalDate.now().minusDays(1));
+	}
+
 }

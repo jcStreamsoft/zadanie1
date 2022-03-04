@@ -1,4 +1,4 @@
-package zadanie1.model;
+package zadanie1.enums;
 
 public enum Currency {
 	USD("usd"),
