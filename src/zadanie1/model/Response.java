@@ -1,8 +1,6 @@
 package zadanie1.model;
 
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Response {
@@ -19,7 +17,7 @@ public class Response {
 		super();
 	}
 	
-	public char getTable() {
+	public char getTable(){
 		return table;
 	}
 

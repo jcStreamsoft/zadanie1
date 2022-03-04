@@ -1,16 +1,12 @@
 package zadanie1;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -27,7 +23,6 @@ public class NbpCurrencyCalculator {
 	private HttpURLConnection connection;
 
 	public void getConnection(Currency currency, LocalDate localDate, ResponseType responseType) {
-
 		try {
 			URL url = new URL(NBP_ADRESS + currency.getCode() + "/" + localDate.toString() + "/?format="
 					+ responseType.getType());
@@ -35,14 +30,12 @@ public class NbpCurrencyCalculator {
 			System.out.println(url);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-
 			if (connection.getResponseCode() == 404) {
 				getLastCurrencyReading(currency, responseType);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void getLastCurrencyReading(Currency currency, ResponseType responseType) {
@@ -56,6 +49,12 @@ public class NbpCurrencyCalculator {
 			e.printStackTrace();
 		}
 	}
+	public URL createUrl(Currency currency, LocalDate localDate, ResponseType responseType) throws MalformedURLException {
+		return new URL(NBP_ADRESS + currency.getCode() + "/" + localDate.toString() + "/?format="+ responseType.getType());
+	}
+	public URL createUrl(Currency currency, ResponseType responseType) throws MalformedURLException {
+		return new URL(NBP_ADRESS + currency.getCode() + "/last/1/?format="+ responseType.getType());
+	}
 
 	public BigDecimal getCurrencyRate(ResponseType responseType)
 			throws StreamReadException, DatabindException, IOException {
@@ -65,9 +64,8 @@ public class NbpCurrencyCalculator {
 			return responseJSON.getRates().get(0).getMid();
 		case XML:
 			Response responseXML = new XmlMapper().readValue(connection.getInputStream(), Response.class);
-			return responseXML.getRates().get(0).getMid();	
+			return responseXML.getRates().get(0).getMid();
 		}
-		
 		return new BigDecimal(1);
 	}
 
