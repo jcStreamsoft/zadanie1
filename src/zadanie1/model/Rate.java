@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public class Rate {
 	String no;
-	String effectiveDate;
+	LocalDate effectiveDate;
 	BigDecimal mid;
 	
 	public Rate() {
@@ -20,12 +20,12 @@ public class Rate {
 		this.no = no;
 	}
 
-	public String getEffectiveDate() {
+	public LocalDate getEffectiveDate() {
 		return effectiveDate;
 	}
 
 	public void setEffectiveDate(String efectiveDate) {
-		this.effectiveDate = efectiveDate;
+		this.effectiveDate =  LocalDate.parse(efectiveDate);;
 	}
 
 	public BigDecimal getMid() {
