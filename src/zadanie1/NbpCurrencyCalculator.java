@@ -10,13 +10,16 @@ import zadanie1.enums.ResponseType;
 
 public class NbpCurrencyCalculator {
 	private NbpConnection nbpConnection;
+	private NbpDataParser nbpDataParser;
 	public NbpCurrencyCalculator() {
 		this.nbpConnection = new NbpConnection();
+		this.nbpDataParser = new NbpDataParser();
 	}
-
+	
 	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
 		nbpConnection.createConnection(currency, date, responseType,0);
-		BigDecimal result = value.multiply(nbpConnection.getCurrencyRate(responseType));
+		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType, nbpConnection.getConnection());
+		BigDecimal result = value.multiply(rate);
 		nbpConnection.disconnectConnection();
 		return result;
 	}
@@ -27,7 +30,8 @@ public class NbpCurrencyCalculator {
 
 	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
 		nbpConnection.createConnection(currency, date, responseType,0);
-		BigDecimal result = value.divide(nbpConnection.getCurrencyRate(responseType), RoundingMode.CEILING);
+		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType, nbpConnection.getConnection());
+		BigDecimal result = value.divide(rate, RoundingMode.CEILING);
 		nbpConnection.disconnectConnection();
 		return result;
 	}

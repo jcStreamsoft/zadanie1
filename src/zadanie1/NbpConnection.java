@@ -26,12 +26,10 @@ public class NbpConnection {
 	
 	public void createConnection(Currency currency, LocalDate localDate, ResponseType responseType,int attempt) {
 		try {
-			URL url = new URL(NBP_ADRESS + currency.getCode() + "/" + localDate.toString() + "/?format="
-					+ responseType.getType());
-			System.out.println(url);
+			URL url = new URL(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType.getType());
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-			if (connection.getResponseCode() == 404 && attempt < MAX_ATTEMPTS) {
+			if ( connection.getResponseCode() == 404 && attempt < MAX_ATTEMPTS) {
 				connection.disconnect();
 				createConnection(currency, localDate.minusDays(1),  responseType,++attempt);
 			}else {
@@ -40,41 +38,31 @@ public class NbpConnection {
 		} catch(MalformedURLException e){
 			throw new WrongURLException();
 		}catch (IOException e) {
+			connection.disconnect();
 			throw new ConnectionException();
 		}
 	}
 	
-
 	public void createLastCurrencyReading(Currency currency, ResponseType responseType) {
 		try {
 			URL url = new URL(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType.getType());
-			System.out.println(url);
+			//System.out.println(url);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch(MalformedURLException e){
+			throw new WrongURLException();
+		}catch (IOException e) {
+			connection.disconnect();
+			throw new ConnectionException();
 		}
 	}
-	
-	public BigDecimal getCurrencyRate(ResponseType responseType) {
-		try {
-			switch (responseType) {
-			case JSON:
-				Response responseJSON = new ObjectMapper().readValue(connection.getInputStream(), Response.class);
-				return responseJSON.getRates().get(0).getMid();
-			case XML:
-				Response responseXML = new XmlMapper().readValue(connection.getInputStream(), Response.class);
-				return responseXML.getRates().get(0).getMid();
-			}
-		}catch(StreamReadException | DatabindException  e) {
-			throw new ReadingCurrencyRateException();
-		}catch(IOException e) {
-			throw new ReadingCurrencyRateException();
-		}
-		return new BigDecimal(1);
+	public HttpURLConnection getConnection() {
+		return connection;
 	}
 	public void disconnectConnection() {
 		connection.disconnect();
 	}
+	
+	
 
 }

@@ -54,7 +54,4 @@ public class Response {
 		rates.stream().forEach(x->System.out.println(x.toString())); 
 		return "Response [table=" + table + ", currency=" + currency + ", code=" + code + ", rates=" +  "]";
 	}
-	
-	
-
 }
