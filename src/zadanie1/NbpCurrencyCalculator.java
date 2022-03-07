@@ -1,6 +1,6 @@
 package zadanie1;
 
-import java.io.IOException;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -14,29 +14,25 @@ public class NbpCurrencyCalculator {
 		this.nbpConnection = new NbpConnection();
 	}
 
-	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date)
-			throws IOException {
+	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
 		nbpConnection.createConnection(currency, date, responseType,0);
 		BigDecimal result = value.multiply(nbpConnection.getCurrencyRate(responseType));
 		nbpConnection.disconnectConnection();
 		return result;
 	}
 
-	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType)
-			throws IOException {
+	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType) {
 		return calculateToPln(value, currency, responseType, LocalDate.now().minusDays(1));
 	}
 
-	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date)
-			throws IOException {
+	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
 		nbpConnection.createConnection(currency, date, responseType,0);
 		BigDecimal result = value.divide(nbpConnection.getCurrencyRate(responseType), RoundingMode.CEILING);
 		nbpConnection.disconnectConnection();
 		return result;
 	}
 
-	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType)
-			throws IOException {
+	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType) {
 		return calculateFromPln(value, currency, responseType, LocalDate.now().minusDays(1));
 	}
 

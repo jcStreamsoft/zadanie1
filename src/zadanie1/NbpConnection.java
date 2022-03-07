@@ -1,7 +1,6 @@
 package zadanie1;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -15,6 +14,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import zadanie1.enums.Currency;
 import zadanie1.enums.ResponseType;
+import zadanie1.exceptions.ConnectionException;
+import zadanie1.exceptions.ReadingCurrencyRateException;
+import zadanie1.exceptions.WrongURLException;
 import zadanie1.model.Response;
 
 public class NbpConnection {
@@ -35,8 +37,10 @@ public class NbpConnection {
 			}else {
 				createLastCurrencyReading(currency, responseType);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch(MalformedURLException e){
+			throw new WrongURLException();
+		}catch (IOException e) {
+			throw new ConnectionException();
 		}
 	}
 	
@@ -51,15 +55,8 @@ public class NbpConnection {
 			e.printStackTrace();
 		}
 	}
-	public URL createUrl(Currency currency, LocalDate localDate, ResponseType responseType) throws MalformedURLException {
-		return new URL(NBP_ADRESS + currency.getCode() + "/" + localDate.toString() + "/?format="+ responseType.getType());
-	}
-	public URL createUrl(Currency currency, ResponseType responseType) throws MalformedURLException {
-		return new URL(NBP_ADRESS + currency.getCode() + "/last/1/?format="+ responseType.getType());
-	}
-
 	
-	public BigDecimal getCurrencyRate(ResponseType responseType)throws IOException {
+	public BigDecimal getCurrencyRate(ResponseType responseType) {
 		try {
 			switch (responseType) {
 			case JSON:
@@ -70,9 +67,9 @@ public class NbpConnection {
 				return responseXML.getRates().get(0).getMid();
 			}
 		}catch(StreamReadException | DatabindException  e) {
-			return new BigDecimal(1);
+			throw new ReadingCurrencyRateException();
 		}catch(IOException e) {
-			return new BigDecimal(1);
+			throw new ReadingCurrencyRateException();
 		}
 		return new BigDecimal(1);
 	}
