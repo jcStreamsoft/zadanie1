@@ -1,6 +1,7 @@
 package zadanie1;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -19,7 +20,7 @@ import zadanie1.exceptions.ReadingCurrencyRateException;
 import zadanie1.exceptions.WrongURLException;
 import zadanie1.model.Response;
 
-public class NbpConnection {
+public class Connection {
 	private final String NBP_ADRESS = "http://api.nbp.pl/api/exchangerates/rates/a/";
 	private HttpURLConnection connection;
 	private final int MAX_ATTEMPTS = 7;
@@ -60,8 +61,12 @@ public class NbpConnection {
 			throw new ConnectionException();
 		}
 	}
-	public HttpURLConnection getConnection() {
-		return connection;
+	public InputStream getInputStream() {
+		try {
+			return connection.getInputStream();
+		} catch (IOException e) {
+			return null;
+		}
 	}
 	public void disconnectConnection() {
 		connection.disconnect();

@@ -1,25 +1,27 @@
 package zadanie1;
 
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import zadanie1.enums.Currency;
 import zadanie1.enums.ResponseType;
-import zadanie1.parsers.NbpDataParser;
+import zadanie1.parsers.DataParser;
 
-public class NbpCurrencyCalculator {
-	private NbpConnection nbpConnection;
-	private NbpDataParser nbpDataParser;
-	public NbpCurrencyCalculator() {
-		this.nbpConnection = new NbpConnection();
-		this.nbpDataParser = new NbpDataParser();
+public class CurrencyCalculator {
+	private Connection nbpConnection;
+	private DataParser nbpDataParser;
+	public CurrencyCalculator() {
+		this.nbpConnection = new Connection();
+		this.nbpDataParser = new DataParser();
 	}
 	
 	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
 		nbpConnection.createConnection(currency, date, responseType);
-		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType, nbpConnection.getConnection());
+		InputStream stream =  nbpConnection.getInputStream();
+		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType,stream);
 		nbpConnection.disconnectConnection();
 		return calculateFromPln(value,rate);
 	}
@@ -30,7 +32,8 @@ public class NbpCurrencyCalculator {
 
 	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
 		nbpConnection.createConnection(currency, date, responseType);
-		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType, nbpConnection.getConnection());
+		InputStream stream =  nbpConnection.getInputStream();
+		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType,stream);
 		nbpConnection.disconnectConnection();
 		return calculateToPln(value,rate);
 	}
