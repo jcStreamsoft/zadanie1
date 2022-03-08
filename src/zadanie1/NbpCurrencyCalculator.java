@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import zadanie1.enums.Currency;
 import zadanie1.enums.ResponseType;
+import zadanie1.parsers.NbpDataParser;
 
 public class NbpCurrencyCalculator {
 	private NbpConnection nbpConnection;
@@ -17,11 +18,10 @@ public class NbpCurrencyCalculator {
 	}
 	
 	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
-		nbpConnection.createConnection(currency, date, responseType,0);
+		nbpConnection.createConnection(currency, date, responseType);
 		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType, nbpConnection.getConnection());
-		BigDecimal result = value.multiply(rate);
 		nbpConnection.disconnectConnection();
-		return result;
+		return calculateFromPln(value,rate);
 	}
 
 	public BigDecimal calculateToPln(BigDecimal value, Currency currency, ResponseType responseType) {
@@ -29,15 +29,20 @@ public class NbpCurrencyCalculator {
 	}
 
 	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType, LocalDate date){
-		nbpConnection.createConnection(currency, date, responseType,0);
+		nbpConnection.createConnection(currency, date, responseType);
 		BigDecimal rate = nbpDataParser.getCurrencyRate(responseType, nbpConnection.getConnection());
-		BigDecimal result = value.divide(rate, RoundingMode.CEILING);
 		nbpConnection.disconnectConnection();
-		return result;
+		return calculateToPln(value,rate);
 	}
 
 	public BigDecimal calculateFromPln(BigDecimal value, Currency currency, ResponseType responseType) {
 		return calculateFromPln(value, currency, responseType, LocalDate.now().minusDays(1));
 	}
-
+	
+	private BigDecimal calculateToPln(BigDecimal value,BigDecimal rate) {
+		return value.divide(rate, RoundingMode.CEILING);
+	}
+	private BigDecimal calculateFromPln(BigDecimal value,BigDecimal rate) {
+		return value.multiply(rate);
+	}
 }

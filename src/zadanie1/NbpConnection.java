@@ -24,11 +24,15 @@ public class NbpConnection {
 	private HttpURLConnection connection;
 	private final int MAX_ATTEMPTS = 7;
 	
-	public void createConnection(Currency currency, LocalDate localDate, ResponseType responseType,int attempt) {
+	public void createConnection(Currency currency, LocalDate localDate, ResponseType responseType) {
+		createConnection(currency, localDate,  responseType,0);
+	}
+	private void createConnection(Currency currency, LocalDate localDate, ResponseType responseType,int attempt) {
 		try {
 			URL url = new URL(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType.getType());
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
+			
 			if ( connection.getResponseCode() == 404 && attempt < MAX_ATTEMPTS) {
 				connection.disconnect();
 				createConnection(currency, localDate.minusDays(1),  responseType,++attempt);
