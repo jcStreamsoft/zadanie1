@@ -14,7 +14,13 @@ import zadanie1.interfaces.StreamParser;
 import zadanie1.model.Response;
 
 public class JsonParser implements StreamParser {
-	
+
+	@Override
+	public String getFormatType() {
+		return ("json");
+	}
+
+	@Override
 	public BigDecimal getRateFromStream(InputStream stream) {
 		try {
 			Response response = parseData(stream);
@@ -28,10 +34,13 @@ public class JsonParser implements StreamParser {
 		return null;
 	}
 	
+	@Override
 	public Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
 		return new ObjectMapper().readValue(stream, Response.class);
-	};
+	}
+
+	@Override
 	public BigDecimal extractRate(Response response) {
 		return response.getRates().get(0).getMid();
-	};
+	}
 }

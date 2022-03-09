@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import zadanie1.model.Response;
 
 public interface StreamParser {
+	public String getFormatType();
 	public BigDecimal getRateFromStream(InputStream stream);
 	public Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException;
 	public BigDecimal extractRate(Response response);

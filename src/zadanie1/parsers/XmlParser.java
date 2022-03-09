@@ -15,22 +15,34 @@ import zadanie1.interfaces.StreamParser;
 import zadanie1.model.Response;
 
 public class XmlParser implements StreamParser{
-	
+	@Override
+	public String getFormatType() {
+		return ("xml");
+	}
+
+	@Override
 	public BigDecimal getRateFromStream(InputStream stream) {
 		try {
 			Response response = parseData(stream);
 			BigDecimal result = extractRate(response);
 			return result;
 		} catch (IOException e) {
-			//save 
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 		return null;
 	}
 	
+
+	@Override
 	public Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
 		return new XmlMapper().readValue(stream, Response.class);
-	};
+	}
+
+	@Override
 	public BigDecimal extractRate(Response response) {
 		return response.getRates().get(0).getMid();
-	};
+	}
+	;
 }
