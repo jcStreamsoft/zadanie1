@@ -28,7 +28,7 @@ public class JsonParser implements StreamParser {
 			return result;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		
 		return null;

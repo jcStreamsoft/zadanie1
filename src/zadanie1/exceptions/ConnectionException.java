@@ -1,6 +1,6 @@
 package zadanie1.exceptions;
 
-public class ConnectionException extends RuntimeException {
+public class ConnectionException extends Exception {
 
 	public ConnectionException() {
 		super();

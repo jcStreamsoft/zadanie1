@@ -1,6 +1,6 @@
 package zadanie1.exceptions;
 
-public class ReadingCurrencyRateException extends  RuntimeException{
+public class ReadingCurrencyRateException extends  Exception{
 
 	public ReadingCurrencyRateException() {
 		super();
