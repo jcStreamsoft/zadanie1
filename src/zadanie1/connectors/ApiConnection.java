@@ -7,6 +7,9 @@ import java.net.URL;
 import java.time.LocalDate;
 
 import zadanie1.enums.Currency;
+import zadanie1.exceptions.streamInputExceptions.ClosingInputStreamException;
+import zadanie1.exceptions.streamInputExceptions.CreatingInputStreamException;
+import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 import zadanie1.interfaces.Streams;
 import zadanie1.model.Request;
 
@@ -16,15 +19,25 @@ public class ApiConnection implements Streams {
 	private UrlCreator urlCreator;
 	private final int MAX_ATTEMPTS = 7;
 
+	@Override
+	public void close() throws ClosingInputStreamException  {
+		connection.disconnect();
+	}
 
-	public void createConnection(LocalDate localDate) {
+	@Override
+	public InputStream getInputStream(Request request) throws CreatingInputStreamException {
+		this.urlCreator = new UrlCreator(request.getCurrency(), request.getDataFormat());
 		try {
+			createConnection(request.getLocalDate());
+			return connection.getInputStream();
+		} catch (IOException | CreatingURLException e) {
+			throw new CreatingInputStreamException("B³¹d przy tworzeniu inputStreama ->" + e.toString());
+		}
+	}
+
+	public void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
 			URL url = findExistingUrl(localDate);
 			createConnectionFromURL(url);
-		} catch (IOException e) {
-			connection.disconnect();
-			// TODO
-		}
 	}
 
 	private void createConnectionFromURL(URL url) throws IOException {
@@ -32,7 +45,7 @@ public class ApiConnection implements Streams {
 		connection.setRequestMethod("GET");
 	}
 
-	private URL findExistingUrl(LocalDate localDate) throws IOException {
+	private URL findExistingUrl(LocalDate localDate) throws IOException, CreatingURLException {
 		URL url = urlCreator.createDateRateUrl(localDate);
 		for (int i = 0; i < MAX_ATTEMPTS; i++) {
 			if (connectionExitst(url)) {
@@ -54,21 +67,4 @@ public class ApiConnection implements Streams {
 		}
 	}
 
-	@Override
-	public void close() throws IOException{
-		connection.disconnect();
-	}
-
-	@Override
-	public InputStream getInputStream(Request request) {
-		this.urlCreator = new UrlCreator(request.getCurrency(), request.getDataFormat());
-		try {
-			createConnection(request.getLocalDate());
-			return connection.getInputStream();
-		} catch (IOException e) {
-			// TODO
-			return null;
-		}
-
-	}
 }

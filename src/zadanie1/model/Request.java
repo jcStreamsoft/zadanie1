@@ -10,6 +10,7 @@ public class Request {
 	private BigDecimal value;
 	private Currency currency;
 	private String dataFormat;
+	private String path;
 	
 	public Request(LocalDate localDate, BigDecimal value, Currency currency) {
 		super();

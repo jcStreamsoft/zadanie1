@@ -17,7 +17,7 @@ public class Main {
 
 	public static void test1() throws IOException {
 		BigDecimal value = new BigDecimal(123.240);
-		LocalDate date = LocalDate.parse("2022-03-06");
+		LocalDate date = LocalDate.parse("2022-03-09");
 
 		Exchanger nbp = new Exchanger(new XmlParser(),new CurrencyCalculator(),new ApiConnection());
 

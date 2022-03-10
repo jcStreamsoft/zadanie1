@@ -9,39 +9,39 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import zadanie1.exceptions.ReadingCurrencyRateException;
+import zadanie1.exceptions.parserExceptions.ParsingException;
+import zadanie1.exceptions.parserExceptions.ReadingCurrencyRateException;
 import zadanie1.interfaces.NbpApiParser;
 import zadanie1.model.Response;
 
 public class JsonParser implements NbpApiParser {
 
+	private final static String formatType = "json";
+
 	@Override
 	public String getFormatType() {
-		return ("json");
+		return formatType;
 	}
 
 	@Override
-	public BigDecimal getRateFromStream(InputStream stream) {
+	public BigDecimal getRateFromStream(InputStream stream) throws ParsingException {
 		try {
 			Response response = parseData(stream);
 			BigDecimal result = extractRate(response);
 			return result;
 		} catch (IOException | ReadingCurrencyRateException e) {
-			// TODO Auto-generated catch block
+			throw new ParsingException("B³¹d parsowania danych ->" + e.toString());
 		}
-		return null;
 	}
 
-	@Override
 	public Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
 		return new ObjectMapper().readValue(stream, Response.class);
 	}
 
-	@Override
-	public BigDecimal extractRate(Response response)throws ReadingCurrencyRateException {
+	public BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
 		BigDecimal rate = response.getRates().get(0).getMid();
-		if(rate == null) {
-			throw new ReadingCurrencyRateException();
+		if (rate == null) {
+			throw new ReadingCurrencyRateException("B³¹d przy odczycie kursu z formatu " + formatType);
 		}
 		return rate;
 	}

@@ -1,4 +1,4 @@
-package zadanie1.exceptions;
+package zadanie1.exceptions.parserExceptions;
 
 public class ReadingCurrencyRateException extends  Exception{
 
