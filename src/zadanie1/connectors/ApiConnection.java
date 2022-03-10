@@ -1,4 +1,4 @@
-package zadanie1;
+package zadanie1.connectors;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,20 +7,15 @@ import java.net.URL;
 import java.time.LocalDate;
 
 import zadanie1.enums.Currency;
+import zadanie1.interfaces.Streams;
+import zadanie1.model.Request;
 
-public class Connection {
+public class ApiConnection implements Streams {
 
 	private HttpURLConnection connection;
 	private UrlCreator urlCreator;
 	private final int MAX_ATTEMPTS = 7;
 
-	public Connection(Currency currency,String dataFormat) {
-		this.urlCreator = new UrlCreator(currency,dataFormat);
-	}
-
-	public void createConnection() {
-		createConnection(LocalDate.now());
-	}
 
 	public void createConnection(LocalDate localDate) {
 		try {
@@ -28,7 +23,7 @@ public class Connection {
 			createConnectionFromURL(url);
 		} catch (IOException e) {
 			connection.disconnect();
-			//TODO
+			// TODO
 		}
 	}
 
@@ -59,16 +54,21 @@ public class Connection {
 		}
 	}
 
-	public InputStream getInputStream() {
-		try {
-			return connection.getInputStream();
-		} catch (IOException e) {
-			//TODO
-			return null;
-		}
+	@Override
+	public void close() throws IOException{
+		connection.disconnect();
 	}
 
-	public void disconnectConnection() {
-		connection.disconnect();
+	@Override
+	public InputStream getInputStream(Request request) {
+		this.urlCreator = new UrlCreator(request.getCurrency(), request.getDataFormat());
+		try {
+			createConnection(request.getLocalDate());
+			return connection.getInputStream();
+		} catch (IOException e) {
+			// TODO
+			return null;
+		}
+
 	}
 }

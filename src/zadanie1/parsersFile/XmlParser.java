@@ -1,4 +1,4 @@
-package zadanie1.parsers;
+package zadanie1.parsersFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,10 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import zadanie1.exceptions.ReadingCurrencyRateException;
-import zadanie1.interfaces.StreamParser;
+import zadanie1.interfaces.NbpApiParser;
+import zadanie1.interfaces.NbpFileParser;
 import zadanie1.model.Response;
 
-public class XmlParser implements StreamParser{
+public class XmlParser implements NbpFileParser {
 	@Override
 	public String getFormatType() {
 		return ("xml");
@@ -28,12 +29,11 @@ public class XmlParser implements StreamParser{
 			return result;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			
+
 		}
-		
+
 		return null;
 	}
-	
 
 	@Override
 	public Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
@@ -43,6 +43,5 @@ public class XmlParser implements StreamParser{
 	@Override
 	public BigDecimal extractRate(Response response) {
 		return response.getRates().get(0).getMid();
-	}
-	;
+	};
 }
