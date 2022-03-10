@@ -8,14 +8,13 @@ import java.io.InputStream;
 
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.streamInputExceptions.ClosingInputStreamException;
+import zadanie1.exceptions.streamInputExceptions.CreatingInputStreamException;
 import zadanie1.interfaces.Streams;
 import zadanie1.model.Request;
 
-public class FileConnection implements Streams{
+public class FileConnection implements Streams {
 
-	private File file;
 	private InputStream inputStream;
-
 
 	@Override
 	public void close() throws ClosingInputStreamException {
@@ -27,15 +26,13 @@ public class FileConnection implements Streams{
 	}
 
 	@Override
-	public InputStream getInputStream(Request request) {
-		 File initialFile = new File("src/main/resources/sample.txt");
-		    try {
-		    	 inputStream = new FileInputStream(initialFile);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return null;
+	public InputStream getInputStream(Request request) throws CreatingInputStreamException {
+		try {
+			File filePath = new File(request.getFilePath());
+			inputStream = new FileInputStream(filePath);
+			return inputStream;
+		} catch (FileNotFoundException e) {
+			throw new CreatingInputStreamException("Nie znaleziono pliku o œcie¿ce : " + request.getFilePath());
+		}
 	}
-
 }

@@ -6,18 +6,22 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class Response {
 	@JacksonXmlProperty(localName = "Table")
 	char table;
-	@JacksonXmlProperty( localName = "Currency")
+	@JacksonXmlProperty(localName = "Country")
+	String country;
+	@JacksonXmlProperty(localName = "Currency")
 	String currency;
-	@JacksonXmlProperty( localName = "Code")
+	@JacksonXmlProperty(localName = "Symbol")
+	String symbol;
+	@JacksonXmlProperty(localName = "Code")
 	String code;
-	@JacksonXmlProperty( localName = "Rates")
+	@JacksonXmlProperty(localName = "Rates")
 	ArrayList<Rate> rates;
-	
+
 	public Response() {
 		super();
 	}
-	
-	public char getTable(){
+
+	public char getTable() {
 		return table;
 	}
 
@@ -49,9 +53,19 @@ public class Response {
 		this.rates = rates;
 	}
 
-	@Override
-	public String toString() {
-		rates.stream().forEach(x->System.out.println(x.toString())); 
-		return "Response [table=" + table + ", currency=" + currency + ", code=" + code + ", rates=" +  "]";
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 }

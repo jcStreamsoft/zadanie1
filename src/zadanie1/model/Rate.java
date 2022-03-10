@@ -5,17 +5,18 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Rate {
-	@JacksonXmlProperty( localName = "No")
-	String no;
-	@JacksonXmlProperty( localName = "EffectiveDate")
-	LocalDate effectiveDate;
-	@JacksonXmlProperty( localName = "Mid")
-	BigDecimal mid;
 	
+	@JacksonXmlProperty(localName = "No")
+	String no;
+	@JacksonXmlProperty(localName = "EffectiveDate")
+	LocalDate effectiveDate;
+	@JacksonXmlProperty(localName = "Mid")
+	BigDecimal mid;
+
 	public Rate() {
 		super();
 	}
-	
+
 	public String getNo() {
 		return no;
 	}
@@ -29,7 +30,7 @@ public class Rate {
 	}
 
 	public void setEffectiveDate(String efectiveDate) {
-		this.effectiveDate =  LocalDate.parse(efectiveDate);;
+		this.effectiveDate = LocalDate.parse(efectiveDate);
 	}
 
 	public BigDecimal getMid() {
@@ -39,10 +40,4 @@ public class Rate {
 	public void setMid(BigDecimal mid) {
 		this.mid = mid;
 	}
-
-	@Override
-	public String toString() {
-		return "Rate [no=" + no + ", efectiveDate=" + effectiveDate + ", mid=" + mid + "]";
-	}
-	
 }

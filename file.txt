@@ -1,0 +1,13 @@
+{
+    "table": "A",
+    "country": "RFN",
+    "symbol": "978",
+    "code": "EUR",
+    "rates": [
+        {
+            "no": "1/A/NBP/2002",
+            "effectiveDate": "2002-01-02",
+            "mid": 3.5496
+        }
+    ]
+}

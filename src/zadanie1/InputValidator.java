@@ -1,10 +1,7 @@
 package zadanie1;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.inputExceptions.DateAfterTodayException;
@@ -13,11 +10,13 @@ import zadanie1.exceptions.inputExceptions.NegativeValueException;
 import zadanie1.exceptions.inputExceptions.NoCurrencyTypeException;
 import zadanie1.model.Request;
 
-public class InputValidator {	
-	public void validate(Request request) throws NegativeValueException, DateBeforeFirstException, DateAfterTodayException, NoCurrencyTypeException {
-			checkValue(request.getValue());
-			checkDate(request.getLocalDate());
-			checkCurrency(request.getCurrency());
+public class InputValidator {
+	
+	public void validate(Request request)
+			throws NegativeValueException, DateBeforeFirstException, DateAfterTodayException, NoCurrencyTypeException {
+		checkValue(request.getValue());
+		checkDate(request.getLocalDate());
+		checkCurrency(request.getCurrency());
 	}
 
 	private void checkValue(BigDecimal value) throws NegativeValueException {

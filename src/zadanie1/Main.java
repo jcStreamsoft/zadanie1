@@ -5,9 +5,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import zadanie1.connectors.ApiConnection;
+import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.model.Request;
-import zadanie1.parsersApi.XmlParser;
+import zadanie1.parsersApi.JsonParser;
 import zadanie1.parsersApi.XmlParser;
 
 public class Main {
@@ -17,13 +18,16 @@ public class Main {
 
 	public static void test1() throws IOException {
 		BigDecimal value = new BigDecimal(123.240);
-		LocalDate date = LocalDate.parse("2022-03-09");
+		LocalDate date = LocalDate.parse("2002-01-02");
 
-		Exchanger nbp = new Exchanger(new XmlParser(),new CurrencyCalculator(),new ApiConnection());
-
-		BigDecimal result = nbp.exchangeToPln(new Request(date,value,Currency.EUR));
+		Exchanger nbp = new Exchanger(new JsonParser(),new CurrencyCalculator(),new FileConnection());
+		Request request = new Request(date,value,Currency.EUR);
+		request.setFilePath("file.txt");
+		BigDecimal result = nbp.exchangeToPln(request);
 		System.out.println(result);
-		BigDecimal result2 = nbp.exchangeFromPln(new Request(date,value,Currency.EUR));
+		Exchanger nbp1 = new Exchanger(new JsonParser(),new CurrencyCalculator(),new ApiConnection());
+		
+		BigDecimal result2 = nbp1.exchangeToPln(request);
 		System.out.println(result2);
 	}
 }

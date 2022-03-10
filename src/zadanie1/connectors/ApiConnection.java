@@ -20,7 +20,7 @@ public class ApiConnection implements Streams {
 	private final int MAX_ATTEMPTS = 7;
 
 	@Override
-	public void close() throws ClosingInputStreamException  {
+	public void close() throws ClosingInputStreamException {
 		connection.disconnect();
 	}
 
@@ -36,8 +36,8 @@ public class ApiConnection implements Streams {
 	}
 
 	public void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
-			URL url = findExistingUrl(localDate);
-			createConnectionFromURL(url);
+		URL url = findExistingUrl(localDate);
+		createConnectionFromURL(url);
 	}
 
 	private void createConnectionFromURL(URL url) throws IOException {
@@ -66,5 +66,4 @@ public class ApiConnection implements Streams {
 			return true;
 		}
 	}
-
 }

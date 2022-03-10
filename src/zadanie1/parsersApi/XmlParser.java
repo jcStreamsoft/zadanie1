@@ -16,7 +16,9 @@ import zadanie1.interfaces.NbpApiParser;
 import zadanie1.model.Response;
 
 public class XmlParser implements NbpApiParser {
-	private  final static String formatType = "xml";
+
+	private final static String formatType = "xml";
+
 	@Override
 	public String getFormatType() {
 		return formatType;
