@@ -12,7 +12,7 @@ import zadanie1.exceptions.inputExceptions.NoCurrencyTypeException;
 import zadanie1.model.Request;
 
 public class InputValidator {
-	
+	private final static LocalDate MIN_DATE =  LocalDate.parse("2002-01-02");
 	public void validate(Request request)
 			throws NegativeValueException, DateBeforeFirstException, DateAfterTodayException, InputValueNullException {
 		checkValue(request.getValue());
@@ -32,11 +32,11 @@ public class InputValidator {
 
 	private void checkDate(LocalDate localDate) throws DateBeforeFirstException, DateAfterTodayException, InputValueNullException {
 		LocalDate today = LocalDate.now();
-		LocalDate firstDate = LocalDate.parse("2002-01-02");
+		
 		if(localDate == null) {
 			throw new InputValueNullException("LocalDate nie mo¿e byæ NULL");
-		}else if (localDate.isBefore(firstDate)) {
-			throw new DateBeforeFirstException("Data nie mo¿e byæ wczeœniejsza ni¿ " + firstDate);
+		}else if (localDate.isBefore(MIN_DATE)) {
+			throw new DateBeforeFirstException("Data nie mo¿e byæ wczeœniejsza ni¿ " + MIN_DATE);
 		} else if (localDate.isAfter(today)) {
 			throw new DateAfterTodayException("Data nie mo¿e byæ poŸniejsza ni¿ dzisaj.");
 		}

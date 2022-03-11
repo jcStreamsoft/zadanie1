@@ -34,15 +34,11 @@ public class JsonParser implements NbpApiParser {
 		}
 	}
 
-	public Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
+	private Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
 		return new ObjectMapper().readValue(stream, Response.class);
 	}
 
-	public BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
-		BigDecimal rate = response.getRates().get(0).getMid();
-		if (rate == null) {
-			throw new ReadingCurrencyRateException("B³¹d przy odczycie kursu z formatu " + formatType);
-		}
-		return rate;
+	private BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
+		return response.getRates().get(0).getMid();
 	}
 }
