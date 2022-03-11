@@ -40,6 +40,11 @@ public class XmlParser implements NbpApiParser {
 	}
 
 	private BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
-		return response.getRates().get(0).getMid();
+		BigDecimal rate = response.getRates().get(0).getMid();
+		if(rate == null) {
+			throw new ReadingCurrencyRateException("Nie znaleziono kursu w danych XML");
+		}
+			return rate;
 	}
+		
 }

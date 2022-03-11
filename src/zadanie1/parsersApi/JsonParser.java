@@ -29,7 +29,7 @@ public class JsonParser implements NbpApiParser {
 			Response response = parseData(stream);
 			BigDecimal result = extractRate(response);
 			return result;
-		} catch (IOException | ReadingCurrencyRateException e) {
+		} catch (IOException e) {
 			throw new ParsingException("B³¹d parsowania danych ->" + e.toString());
 		}
 	}
@@ -38,7 +38,7 @@ public class JsonParser implements NbpApiParser {
 		return new ObjectMapper().readValue(stream, Response.class);
 	}
 
-	private BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
+	private BigDecimal extractRate(Response response){
 		return response.getRates().get(0).getMid();
 	}
 }
