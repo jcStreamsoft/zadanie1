@@ -22,11 +22,11 @@ public class Main {
 
 		Exchanger nbp = new Exchanger(new JsonParser(),new CurrencyCalculator(),new FileConnection());
 		Request request = new Request(date,value,Currency.EUR);
-		request.setFilePath("file.txt");
+		request.setFilePath("fileJson.txt");
 		BigDecimal result = nbp.exchangeToPln(request);
 		System.out.println(result);
-		Exchanger nbp1 = new Exchanger(new JsonParser(),new CurrencyCalculator(),new ApiConnection());
-		
+		Exchanger nbp1 = new Exchanger(new XmlParser(),new CurrencyCalculator(),new FileConnection());
+		request.setFilePath("fileXml.txt");
 		BigDecimal result2 = nbp1.exchangeToPln(request);
 		System.out.println(result2);
 	}
