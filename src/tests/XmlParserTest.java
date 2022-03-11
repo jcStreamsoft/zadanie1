@@ -45,9 +45,9 @@ public class XmlParserTest {
 		assertThrows(ParsingException.class,() -> parser.getRateFromStream(inputStream));	
 	}
 	@Test
-	public void givenStreamMidNull_whenGetRateFromStream_thenThrowsReadingCurrencyRateException() {
+	public void givenStreamMidNull_whenGetRateFromStream_thenThrowsParsingException() {
 		String testString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ExchangeRatesSeries xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Table>A</Table><Country>USA</Country><Symbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid></Mid></Rate></Rates></ExchangeRatesSeries>";
 		InputStream inputStream = new ByteArrayInputStream(testString.getBytes(StandardCharsets.UTF_8));
-		assertThrows(ReadingCurrencyRateException.class,() -> parser.getRateFromStream(inputStream));	
+		assertThrows(ParsingException.class,() -> parser.getRateFromStream(inputStream));	
 	}
 }

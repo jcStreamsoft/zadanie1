@@ -1,7 +1,7 @@
 package zadanie1.enums;
 
 public enum Currency {
-	USD("usd"), PLN("pln"), EUR("eur");
+	USD("usd"),CHF("chf"),AUD("aud"), EUR("eur");
 
 	private String code;
 

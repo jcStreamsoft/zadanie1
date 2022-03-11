@@ -12,7 +12,9 @@ import zadanie1.exceptions.inputExceptions.NoCurrencyTypeException;
 import zadanie1.model.Request;
 
 public class InputValidator {
+	
 	private final static LocalDate MIN_DATE =  LocalDate.parse("2002-01-02");
+	
 	public void validate(Request request)
 			throws NegativeValueException, DateBeforeFirstException, DateAfterTodayException, InputValueNullException {
 		checkValue(request.getValue());

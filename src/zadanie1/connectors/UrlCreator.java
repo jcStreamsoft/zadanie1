@@ -28,7 +28,7 @@ public class UrlCreator {
 	public URL createDateRateUrl(LocalDate localDate) throws CreatingURLException {
 		try {
 			return new URL(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException| NullPointerException  e) {
 			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null");
 		}
 	}
