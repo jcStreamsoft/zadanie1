@@ -42,7 +42,7 @@ public class UrlCreatorTest {
 		assertThrows(CreatingURLException.class,() -> creator.createDateRateUrl(date));	
 	}
 	@Test
-	public void givenDateNull_whenCreateLastRateUrl_thenThrowsCreatingURLException() {
+	public void givenDateNullwhenCreateLastRateUrl_thenThrowsCreatingURLException() {
 		UrlCreator creator = new UrlCreator (null,"json");
 		LocalDate date = null;	
 		assertThrows(CreatingURLException.class,() -> creator.createDateRateUrl(date));	

@@ -40,7 +40,26 @@ public class ExchangerTest {
 				.Builder(value, currency)
 				.localDate(date)
 				.build();
-		MathContext m = new MathContext(16);
+		MathContext m = new MathContext(15);
+		// when
+		BigDecimal result = exchanger.exchangeToPln(request);
+		result = result.round(m);
+		// then
+		BigDecimal expected = new BigDecimal(0.5658348893792791263509308);
+		expected = expected.round(m);
+		//assertEquals(result, expected);
+		assertTrue(result.compareTo(expected)==0);
+	}
+	@Test
+	public void givenCorrectRequest_whenExchangeFromPln_thenValue() {
+		// given
+		date = LocalDate.parse("2002-01-04");
+		value = new BigDecimal(2);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
+		MathContext m = new MathContext(1);
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
 		result = result.round(m);

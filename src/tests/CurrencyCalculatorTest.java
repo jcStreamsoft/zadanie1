@@ -34,7 +34,7 @@ public class CurrencyCalculatorTest {
 		Calculator calc = new CurrencyCalculator();
 		BigDecimal value = new BigDecimal(2);
 		BigDecimal rate = new BigDecimal(3.5346);
-		MathContext m = new MathContext(16);
+		MathContext m = new MathContext(1);
 		// when
 		BigDecimal result = calc.calculateToPln(value,rate);
 		result = result.round(m);

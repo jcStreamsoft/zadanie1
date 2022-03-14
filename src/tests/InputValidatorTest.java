@@ -63,6 +63,6 @@ public class InputValidatorTest {
 		assertThrows(InputValueNullException.class,() -> validator.validate( new Request
 				.Builder(new BigDecimal(1), null)
 				.localDate(LocalDate.now())
-				.build()));
+				.build()));	
 	}
 }

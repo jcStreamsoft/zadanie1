@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ExchangeRatesSeries xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <Table>A</Table>
-    <Country>USA</Country>
-    <Symbol>787</Symbol>
-    <Code>USD</Code>
-    <Rates>
-        <Rate>
-            <No>3/A/NBP/2002</No>
-            <EffectiveDate>2002-01-04</EffectiveDate>
-            <Mid>3.9383</Mid>
-        </Rate>
-    </Rates>
-</ExchangeRatesSeries>
+<?xml version="1.0" encoding="utf-8"?><ExchangeRatesSeries xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Table>A</Table><Country>USA</Country><Symbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid>3.9383</Mid></Rate></Rates></ExchangeRatesSeries>

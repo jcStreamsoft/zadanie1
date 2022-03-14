@@ -40,7 +40,8 @@ public class ApiConnectionTest {
 			// when
 			result = con.getInputStream(request);
 			// then
-			assertEquals(result.readAllBytes(), expected.readAllBytes());
+			assertEquals(new String(result.readAllBytes(), StandardCharsets.UTF_8),
+					new String(expected.readAllBytes()));
 		} catch (CreatingInputStreamException e) {
 			fail("B³¹d odczytu InputStream");
 		} catch (FileNotFoundException e) {

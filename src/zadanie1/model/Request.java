@@ -48,7 +48,6 @@ public class Request {
 		private LocalDate localDate;
 		private BigDecimal value;
 		private Currency currency;
-		private LocalDate dataFormat;
 		private String filePath;
 
 		public Builder(BigDecimal value, Currency currency) {
