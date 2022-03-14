@@ -35,7 +35,7 @@ public class ApiConnection implements Streams {
 		}
 	}
 
-	public void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
+	private void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
 		URL url = findExistingUrl(localDate);
 		createConnectionFromURL(url);
 	}

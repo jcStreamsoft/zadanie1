@@ -17,15 +17,15 @@ public class Main {
 	}
 
 	public static void test1() throws IOException {
-		BigDecimal value = new BigDecimal(123.240);
-		LocalDate date = LocalDate.parse("2002-01-02");
+		BigDecimal value = new BigDecimal(2.0);
+		LocalDate date = LocalDate.parse("2002-01-04");
 
-		Exchanger nbp = new Exchanger(new JsonParser(),new CurrencyCalculator(),new FileConnection());
+		Exchanger nbp = new Exchanger(new JsonParser(),new CurrencyCalculator(),new ApiConnection());
 		Request request = new Request(date,value,Currency.EUR);
 		request.setFilePath("fileJson.txt");
-		BigDecimal result = nbp.exchangeToPln(request);
+		BigDecimal result = nbp.exchangeFromPln(request);
 		System.out.println(result);
-		Exchanger nbp1 = new Exchanger(new XmlParser(),new CurrencyCalculator(),new FileConnection());
+		Exchanger nbp1 = new Exchanger(new XmlParser(),new CurrencyCalculator(),new ApiConnection());
 		request.setFilePath("fileXml.txt");
 		BigDecimal result2 = nbp1.exchangeToPln(request);
 		System.out.println(result2);

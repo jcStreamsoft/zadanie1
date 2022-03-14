@@ -22,7 +22,6 @@ public class Exchanger {
 		this.streamConnection = streamConnection;
 		this.parser = parser;
 		this.validator = new InputValidator();
-
 	}
 
 	public BigDecimal exchangeToPln(Request request) {
@@ -38,6 +37,7 @@ public class Exchanger {
 			LOG.log(Level.INFO, "Zamykanie InputStreama");
 			streamConnection.close();
 			LOG.log(Level.INFO, "Przeliczanie kursu");
+			System.out.println("value = "+ value + " rate = " +rate);
 			return currencyCalc.calculateToPln(value, rate);
 		} catch (Exception e) {
 			LOG.log(Level.WARNING, "{0}", e.toString());
@@ -57,7 +57,7 @@ public class Exchanger {
 			BigDecimal value = request.getValue();
 			LOG.log(Level.INFO, "Zamykanie InputStreama");
 			streamConnection.close();
-			LOG.log(Level.INFO, "Przeliczanie kursu");
+			LOG.log(Level.INFO, "Przeliczanie kursu ");
 			return currencyCalc.calculateFromPln(value, rate);
 		} catch (Exception e) {
 			LOG.log(Level.WARNING, "{0}", e.toString());
