@@ -19,6 +19,7 @@ public class UrlCreator {
 
 	public URL createLastRateUrl() throws CreatingURLException {
 		try {
+			checkResponseTypeNotNull();
 			return new URL(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType);
 		} catch (MalformedURLException e) {
 			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null");
@@ -27,9 +28,15 @@ public class UrlCreator {
 
 	public URL createDateRateUrl(LocalDate localDate) throws CreatingURLException {
 		try {
+			checkResponseTypeNotNull();
 			return new URL(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
 		} catch (MalformedURLException| NullPointerException  e) {
 			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null");
+		}
+	}
+	private void checkResponseTypeNotNull() {
+		if(responseType == null) {
+			throw new NullPointerException();
 		}
 	}
 }

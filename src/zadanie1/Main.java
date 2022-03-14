@@ -21,8 +21,13 @@ public class Main {
 		LocalDate date = LocalDate.parse("2002-01-04");
 
 		Exchanger nbp = new Exchanger(new JsonParser(),new CurrencyCalculator(),new ApiConnection());
-		Request request = new Request(date,value,Currency.EUR);
-		request.setFilePath("fileJson.txt");
+		Request request = new Request
+				.Builder(value, Currency.EUR)
+				.localDate(date)
+				.filePath("fileJson.txt")
+				.build();
+		
+		
 		BigDecimal result = nbp.exchangeFromPln(request);
 		System.out.println(result);
 		Exchanger nbp1 = new Exchanger(new XmlParser(),new CurrencyCalculator(),new ApiConnection());

@@ -6,27 +6,15 @@ import java.time.LocalDate;
 import zadanie1.enums.Currency;
 
 public class Request {
-	
+
 	private LocalDate localDate;
 	private BigDecimal value;
 	private Currency currency;
 	private String dataFormat;
 	private String filePath;
 
-	public Request(LocalDate localDate, BigDecimal value, Currency currency) {
-		super();
-		this.localDate = localDate;
-		this.value = value;
-		this.currency = currency;
+	private Request() {
 	}
-
-	public Request(BigDecimal value, Currency currency) {
-		super();
-		this.localDate = LocalDate.now();
-		this.value = value;
-		this.currency = currency;
-	}
-	
 
 	public LocalDate getLocalDate() {
 		return localDate;
@@ -54,5 +42,44 @@ public class Request {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public static class Builder {
+		private LocalDate localDate;
+		private BigDecimal value;
+		private Currency currency;
+		private LocalDate dataFormat;
+		private String filePath;
+
+		public Builder(BigDecimal value, Currency currency) {
+			this.value = value;
+			this.currency = currency;
+		}
+
+		public Builder localDate(LocalDate localDate) {
+			this.localDate = localDate;
+			return this;
+		}
+
+		public Builder filePath(String filePath) {
+			this.filePath = filePath;
+			return this;
+		}
+
+		public Request build() {
+			Request request = new Request();
+			request.value = this.value;
+			request.currency = this.currency;
+			if (localDate == null) {
+				request.localDate = LocalDate.now();
+			} else {
+				request.localDate = this.localDate;
+			}
+			if (filePath != null) {
+				request.filePath = this.filePath;
+			}
+			return request;
+		}
+
 	}
 }

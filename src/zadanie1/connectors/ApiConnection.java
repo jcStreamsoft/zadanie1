@@ -29,6 +29,7 @@ public class ApiConnection implements Streams {
 		this.urlCreator = new UrlCreator(request.getCurrency(), request.getDataFormat());
 		try {
 			createConnection(request.getLocalDate());
+			
 			return connection.getInputStream();
 		} catch (IOException | CreatingURLException e) {
 			throw new CreatingInputStreamException("B³¹d przy tworzeniu inputStreama ->" + e.toString());

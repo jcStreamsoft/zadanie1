@@ -15,14 +15,12 @@ import java.time.LocalDate;
 
 import org.testng.annotations.Test;
 
-import zadanie1.connectors.ApiConnection;
 import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.streamInputExceptions.CreatingInputStreamException;
 import zadanie1.model.Request;
 
-public class ApiConnectionTest {
-
+public class FileConnectionTest {
 	@Test
 	public void givenCorrectRequest_whenGetInputStream_thenReturnStream() {
 		// given
@@ -32,21 +30,25 @@ public class ApiConnectionTest {
 				.Builder(new BigDecimal(1), Currency.USD)
 				.localDate(LocalDate.parse("2002-01-04"))
 				.build();
-		request.setDataFormat("json");
-		ApiConnection con = new ApiConnection();
+		request.setFilePath("fileJson.txt");
+		FileConnection con = new FileConnection();
 		InputStream result;
 		try {
+			
 			expected = new FileInputStream(filePath);
 			// when
+			
 			result = con.getInputStream(request);
-			// then
-			assertEquals(result.readAllBytes(), expected.readAllBytes());
-		} catch (CreatingInputStreamException e) {
+			
+			// then 
+			assertEquals(result.readAllBytes(),expected.readAllBytes());
+			
+		}catch(CreatingInputStreamException e) {
 			fail("B³¹d odczytu InputStream");
 		} catch (FileNotFoundException e) {
 			fail("Brak pliku testowego");
 		} catch (IOException e) {
 			fail("IOException");
-		}
+		}	
 	}
 }

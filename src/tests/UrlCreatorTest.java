@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import zadanie1.connectors.UrlCreator;
 import zadanie1.enums.Currency;
-s
+
 import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 
 public class UrlCreatorTest {
@@ -42,7 +42,7 @@ public class UrlCreatorTest {
 		assertThrows(CreatingURLException.class,() -> creator.createDateRateUrl(date));	
 	}
 	@Test
-	public void givenDateNullwhenCreateLastRateUrl_thenThrowsCreatingURLException() {
+	public void givenDateNull_whenCreateLastRateUrl_thenThrowsCreatingURLException() {
 		UrlCreator creator = new UrlCreator (null,"json");
 		LocalDate date = null;	
 		assertThrows(CreatingURLException.class,() -> creator.createDateRateUrl(date));	

@@ -26,18 +26,12 @@ public class Exchanger {
 
 	public BigDecimal exchangeToPln(Request request) {
 		try {
-			LOG.log(Level.INFO, "Walidowanie danych");
 			validator.validate(request);
 			request.setDataFormat(parser.getFormatType());
-			LOG.log(Level.INFO, "Tworzenie InputStreama");
 			InputStream stream = streamConnection.getInputStream(request);
-			LOG.log(Level.INFO, "Parsowanie InputStreama");
 			BigDecimal rate = parser.getRateFromStream(stream);
 			BigDecimal value = request.getValue();
-			LOG.log(Level.INFO, "Zamykanie InputStreama");
 			streamConnection.close();
-			LOG.log(Level.INFO, "Przeliczanie kursu");
-			System.out.println("value = "+ value + " rate = " +rate);
 			return currencyCalc.calculateToPln(value, rate);
 		} catch (Exception e) {
 			LOG.log(Level.WARNING, "{0}", e.toString());
@@ -47,17 +41,12 @@ public class Exchanger {
 
 	public BigDecimal exchangeFromPln(Request request) {
 		try {
-			LOG.log(Level.INFO, "Walidowanie danych");
 			validator.validate(request);
 			request.setDataFormat(parser.getFormatType());
-			LOG.log(Level.INFO, "Tworzenie InputStreama");
 			InputStream stream = streamConnection.getInputStream(request);
-			LOG.log(Level.INFO, "Parsowanie InputStreama");
 			BigDecimal rate = parser.getRateFromStream(stream);
 			BigDecimal value = request.getValue();
-			LOG.log(Level.INFO, "Zamykanie InputStreama");
 			streamConnection.close();
-			LOG.log(Level.INFO, "Przeliczanie kursu ");
 			return currencyCalc.calculateFromPln(value, rate);
 		} catch (Exception e) {
 			LOG.log(Level.WARNING, "{0}", e.toString());

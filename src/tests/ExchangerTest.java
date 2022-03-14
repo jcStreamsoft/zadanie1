@@ -36,7 +36,10 @@ public class ExchangerTest {
 		// given
 		date = LocalDate.parse("2002-01-04");
 		value = new BigDecimal(2);
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 		MathContext m = new MathContext(16);
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -52,7 +55,10 @@ public class ExchangerTest {
 	public void givenRequestNullLocalDate_whenExchangeToPln_thenRetrunNull() {
 		// given
 		date = null;
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -65,7 +71,10 @@ public class ExchangerTest {
 	public void givenRequestBeforFirstLocalDate_whenExchangeToPln_thenRetrunNull() {
 		// given
 		date = LocalDate.parse("2002-01-01");
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -78,7 +87,10 @@ public class ExchangerTest {
 	public void givenRequestAfterTodayLocalDate_whenExchangeToPln_thenRetrunNull() {
 		// given
 		date = LocalDate.now().plusDays(1);
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -91,7 +103,10 @@ public class ExchangerTest {
 	public void givenRequestNullValue_whenExchangeToPln_thenRetrunNull() {
 		// given
 		value = null;
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -104,7 +119,10 @@ public class ExchangerTest {
 	public void givenRequestNegativeValue_whenExchangeToPln_thenRetrunNull() {
 		// given
 		value = new BigDecimal(-1);
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -117,7 +135,10 @@ public class ExchangerTest {
 	public void givenRequestNullCurrency_whenExchangeToPln_thenRetrunNull() {
 		// given
 		currency = null;
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -129,7 +150,10 @@ public class ExchangerTest {
 	@Test
 	public void givenRequestNoPath_whenExchangeToPln_thenRetrunNull() {
 		// given
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 		exchanger = new Exchanger(new JsonParser(), new CurrencyCalculator(), new FileConnection());
 
 		// when
@@ -142,7 +166,10 @@ public class ExchangerTest {
 	@Test
 	public void givenNoParser_whenExchangeToPln_thenRetrunNull() {
 		// given
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 		exchanger = new Exchanger(null, new CurrencyCalculator(), new FileConnection());
 
 		// when
@@ -155,7 +182,10 @@ public class ExchangerTest {
 	@Test
 	public void givenNoCalculator_whenExchangeToPln_thenRetrunNull() {
 		// given
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 		exchanger = new Exchanger(new JsonParser(), null, new FileConnection());
 
 		// when
@@ -168,7 +198,10 @@ public class ExchangerTest {
 	@Test
 	public void givenNoStreams_whenExchangeToPln_thenRetrunNull() {
 		// given
-		Request request = new Request(date, value, currency);
+		Request request = new Request
+				.Builder(value, currency)
+				.localDate(date)
+				.build();
 		exchanger = new Exchanger(new JsonParser(), new CurrencyCalculator(), null);
 
 		// when

@@ -25,26 +25,44 @@ public class InputValidatorTest {
 	}
 	@Test
 	public void givenValueNull_whenValidate_thenThrowsInputValueNullException() {
-		assertThrows(InputValueNullException.class,() -> validator.validate(new Request(LocalDate.now(), null, Currency.EUR)));	
+		assertThrows(InputValueNullException.class,() -> validator.validate( new Request
+				.Builder(null, Currency.EUR)
+				.localDate(LocalDate.now())
+				.build()));	
 	}
 	@Test
 	public void givenValueNegative_whenValidate_thenThrowsNegativeValueException() {
-		assertThrows(NegativeValueException.class,() -> validator.validate(new Request(LocalDate.now(), new BigDecimal(-1), Currency.EUR)));	
+		assertThrows(NegativeValueException.class,() -> validator.validate(new Request
+				.Builder(new BigDecimal(-1), Currency.EUR)
+				.localDate(LocalDate.now())
+				.build()));	
 	}
 	@Test
 	public void givenDateAfterToday_whenValidate_thenThrowsDateAfterTodayException() {
-		assertThrows(DateAfterTodayException.class,() -> validator.validate(new Request(LocalDate.now().plusDays(1), new BigDecimal(1), Currency.EUR)));	
+		assertThrows(DateAfterTodayException.class,() -> validator.validate(new Request
+				.Builder(new BigDecimal(1), Currency.EUR)
+				.localDate(LocalDate.now().plusDays(1))
+				.build()));
 	}
 	@Test
 	public void givenDateBeforeFirst_whenValidate_thenThrowsDateBeforeFirstException() {
-		assertThrows(DateBeforeFirstException.class,() -> validator.validate(new Request(LocalDate.parse("2002-01-01"), new BigDecimal(1), Currency.EUR)));	
+		assertThrows(DateBeforeFirstException.class,() -> validator.validate(new Request
+				.Builder(new BigDecimal(1), Currency.EUR)
+				.localDate(LocalDate.parse("2002-01-01"))
+				.build()));	
 	}
-	@Test
-	public void givenDateBeforeFirst_whenValidate_thenThrowsInputValueNullException() {
-		assertThrows(InputValueNullException.class,() -> validator.validate(new Request(null, new BigDecimal(1), Currency.EUR)));	
-	}
+//	@Test
+//	public void givenDateNull_whenValidate_thenThrowsInputValueNullException() {
+//		assertThrows(InputValueNullException.class,() -> validator.validate(new Request
+//				.Builder(new BigDecimal(-1), Currency.EUR)
+//				.localDate(LocalDate.now())
+//				.build()));	
+//	}
 	@Test
 	public void givenCurrencyNull_whenValidate_thenThrowsInputValueNullException() {
-		assertThrows(InputValueNullException.class,() -> validator.validate( new Request(null, new BigDecimal(1), null)));	
+		assertThrows(InputValueNullException.class,() -> validator.validate( new Request
+				.Builder(new BigDecimal(1), null)
+				.localDate(LocalDate.now())
+				.build()));
 	}
 }
