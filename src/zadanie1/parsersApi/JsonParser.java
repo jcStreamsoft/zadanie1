@@ -21,7 +21,7 @@ public class JsonParser implements Parse {
 	}
 
 	@Override
-	public BigDecimal getRateFromStream(String inputString) throws ParsingException {
+	public BigDecimal getRateFromString(String inputString) throws ParsingException {
 		try {
 			Response response = parseData(inputString);
 			BigDecimal result = extractRate(response);

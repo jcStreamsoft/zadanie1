@@ -26,7 +26,7 @@ public class Exchanger {
 			validator.validate(request);
 			request.setDataFormat(parser.getFormatType());
 			String inputString = streamConnection.getInputString(request);
-			BigDecimal rate = parser.getRateFromStream(inputString);
+			BigDecimal rate = parser.getRateFromString(inputString);
 			BigDecimal value = request.getValue();
 
 			return currencyCalc.calculateToPln(value, rate);
@@ -41,7 +41,7 @@ public class Exchanger {
 			validator.validate(request);
 			request.setDataFormat(parser.getFormatType());
 			String inputString = streamConnection.getInputString(request);
-			BigDecimal rate = parser.getRateFromStream(inputString);
+			BigDecimal rate = parser.getRateFromString(inputString);
 			BigDecimal value = request.getValue();
 
 			return currencyCalc.calculateFromPln(value, rate);

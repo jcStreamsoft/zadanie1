@@ -2,12 +2,15 @@ package tests;
 
 import static org.testng.Assert.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 import org.testng.annotations.Test;
 
@@ -24,15 +27,16 @@ public class FileConnectionTest {
 		File filePath = new File("fileJson.txt");
 		Request request = new Request.Builder(new BigDecimal(1), Currency.USD).localDate(LocalDate.parse("2002-01-04"))
 				.build();
-		request.setFilePath("fileJson.txt");
-		FileConnection con = new FileConnection();
+		FileConnection con = new FileConnection("fileJson.txt");
+		String expected = new BufferedReader(
+				new InputStreamReader(new FileInputStream("fileJson.txt"), StandardCharsets.UTF_8)).lines()
+						.collect(Collectors.joining());
 
-		InputStream expected = new FileInputStream(filePath);
 		// when
 
-		InputStream result = con.getInputStream(request);
+		String result = con.getInputString(request);
 
 		// then
-		assertEquals(result.readAllBytes(), expected.readAllBytes());
+		assertEquals(result, expected);
 	}
 }

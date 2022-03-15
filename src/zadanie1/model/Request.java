@@ -11,7 +11,6 @@ public class Request {
 	private BigDecimal value;
 	private Currency currency;
 	private String dataFormat;
-	private String filePath;
 
 	private Request() {
 	}
@@ -36,14 +35,6 @@ public class Request {
 		this.dataFormat = dataFormat;
 	}
 
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
 	public static Builder getBuilder(BigDecimal value, Currency currency) {
 		return new Builder(value, currency);
 	}
@@ -52,7 +43,6 @@ public class Request {
 		private LocalDate localDate;
 		private BigDecimal value;
 		private Currency currency;
-		private String filePath;
 
 		public Builder(BigDecimal value, Currency currency) {
 			this.value = value;
@@ -61,11 +51,6 @@ public class Request {
 
 		public Builder localDate(LocalDate localDate) {
 			this.localDate = localDate;
-			return this;
-		}
-
-		public Builder filePath(String filePath) {
-			this.filePath = filePath;
 			return this;
 		}
 
@@ -78,9 +63,7 @@ public class Request {
 			} else {
 				request.localDate = this.localDate;
 			}
-			if (filePath != null) {
-				request.filePath = this.filePath;
-			}
+
 			return request;
 		}
 

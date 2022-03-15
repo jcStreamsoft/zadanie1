@@ -32,7 +32,7 @@ public class JsonParserTest {
 		BigDecimal expectedResult = new BigDecimal(3.9383).setScale(4, RoundingMode.CEILING);
 
 		// when
-		BigDecimal rate = parser.getRateFromStream(inputStream);
+		BigDecimal rate = parser.getRateFromString(testString);
 
 		// then
 		assertEquals(rate, expectedResult);
@@ -43,17 +43,16 @@ public class JsonParserTest {
 	public void shouldThrowException_whenJsonInputIsIncorrect() {
 		// given
 		String testString = "{\"table\":\"A\",:\"USA\",\"symbol\":\"787\",\"code\":\"USD\",\"rates\":[{\"no\":\"3/A/NBP/2002\",\"effectiveDate\":\"2002-01-04\",\"mid\":3.9383}]}";
-		InputStream inputStream = new ByteArrayInputStream(testString.getBytes(StandardCharsets.UTF_8));
 		// catch throws
-		assertThrows(ParsingException.class, () -> parser.getRateFromStream(inputStream));
+		assertThrows(ParsingException.class, () -> parser.getRateFromString(testString));
 	}
 
 	@Test
 	public void givenStreamMidNull_whenGetRateFromStream_thenThrowsParsingException() {
 		// given
 		String testString = "{\"table\":\"A\",\"country\":\"USA\",\"symbol\":\"787\",\"code\":\"USD\",\"rates\":[{\"no\":\"3/A/NBP/2002\",\"effectiveDate\":\"2002-01-04\",\"mid\":}]}";
-		InputStream inputStream = new ByteArrayInputStream(testString.getBytes(StandardCharsets.UTF_8));
+
 		// catch throws
-		assertThrows(ParsingException.class, () -> parser.getRateFromStream(inputStream));
+		assertThrows(ParsingException.class, () -> parser.getRateFromString(testString));
 	}
 }

@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import org.testng.annotations.Test;
@@ -28,11 +27,10 @@ public class ApiConnectionTest {
 				.build();
 		request.setDataFormat("json");
 		ApiConnection con = new ApiConnection();
-		InputStream result;
 		InputStream expected = new FileInputStream(filePath);
 		// when
-		result = con.getInputStream(request);
+		String result = con.getInputString(request);
 		// then
-		assertEquals(new String(result.readAllBytes(), StandardCharsets.UTF_8), new String(expected.readAllBytes()));
+		assertEquals(result, new String(expected.readAllBytes()));
 	}
 }

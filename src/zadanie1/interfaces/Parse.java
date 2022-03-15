@@ -8,5 +8,5 @@ public interface Parse {
 
 	public String getFormatType();
 
-	public BigDecimal getRateFromStream(String inputString) throws ParsingException;
+	public BigDecimal getRateFromString(String inputString) throws ParsingException;
 }

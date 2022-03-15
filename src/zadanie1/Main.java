@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import zadanie1.connectors.ApiConnection;
+import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.model.Request;
 import zadanie1.parsersApi.JsonParser;
@@ -21,12 +22,12 @@ public class Main {
 		LocalDate date = LocalDate.parse("2002-01-04");
 
 		Exchanger nbp = new Exchanger(new JsonParser(), new CurrencyCalculator(), new ApiConnection());
-		Request request = Request.getBuilder(value, Currency.EUR).localDate(date).filePath("fileJson.txt").build();
+		Request request = Request.getBuilder(value, Currency.EUR).localDate(date).build();
 
 		BigDecimal result = nbp.exchangeFromPln(request);
 		System.out.println(result);
-		Exchanger nbp1 = new Exchanger(new XmlParser(), new CurrencyCalculator(), new ApiConnection());
-		request.setFilePath("fileXml.txt");
+		Exchanger nbp1 = new Exchanger(new XmlParser(), new CurrencyCalculator(), new FileConnection("fileXml.txt"));
+
 		BigDecimal result2 = nbp1.exchangeToPln(request);
 		System.out.println(result2);
 	}

@@ -3,7 +3,7 @@ package zadanie1.connectors;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -14,21 +14,22 @@ import zadanie1.interfaces.ReturnInputString;
 import zadanie1.model.Request;
 
 public class FileConnection implements ReturnInputString {
+	private String filePath;
 
-	private InputStream inputStream;
-
-	// dodac fielpath
+	public FileConnection(String filePath) {
+		this.filePath = filePath;
+	}
 
 	@Override
 	public String getInputString(Request request) throws CreatingInputStringException {
 		try {
-			File filePath = new File(request.getFilePath());
-			inputStream = new FileInputStream(filePath);
+			File inputFile = new File(filePath);
+			InputStream inputStream = new FileInputStream(inputFile);
 			String result = createStringFromStream(inputStream);
 			inputStream.close();
 			return result;
-		} catch (FileNotFoundException e) {
-			throw new CreatingInputStringException("Nie znaleziono pliku o œcie¿ce : " + request.getFilePath(), e);
+		} catch (IOException e) {
+			throw new CreatingInputStringException("Nie znaleziono pliku o œcie¿ce : " + filePath, e);
 		}
 	}
 
