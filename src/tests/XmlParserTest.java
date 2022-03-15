@@ -22,7 +22,7 @@ public class XmlParserTest {
 	}
 
 	@Test
-	public void givenCorrectStream_whenGetRateFromStream_thenBigDecimalEqual() throws ParsingException {
+	public void shouldReturnTrue_whenXmlStringCorrect() throws ParsingException {
 		// given
 		String testString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ExchangeRatesSeries xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Table>A</Table><Country>USA</Country><Symbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid>3.9383</Mid></Rate></Rates></ExchangeRatesSeries>";
 		BigDecimal result = new BigDecimal(3.9383).setScale(4, RoundingMode.CEILING);
@@ -33,18 +33,18 @@ public class XmlParserTest {
 	}
 
 	@Test
-	public void givenNotCorrectStream_whenGetRateFromStream_thenThrowsParsingException() {
+	public void shouldThrowException_whenXmlInputIsIncorrect() {
 		// given
-		String testString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ExchangeRatesSeries xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Country>USA</CountrSymbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid>3.9383</Mid></Rate></Rates></ExchangeRatesSeries>";
+		String xmlIncorrectString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ExchangeRatesSeries xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Country>USA</CountrSymbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid>3.9383</Mid></Rate></Rates></ExchangeRatesSeries>";
 		// catch throw
-		assertThrows(ParsingException.class, () -> parser.getRateFromString(testString));
+		assertThrows(ParsingException.class, () -> parser.getRateFromString(xmlIncorrectString));
 	}
 
 	@Test
-	public void givenStreamMidNull_whenGetRateFromStream_thenThrowsParsingException() {
+	public void shouldThrowParsingException_whenXmlStringMidValueNull() {
 		// given
-		String testString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ExchangeRatesSeries xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Table>A</Table><Country>USA</Country><Symbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid></Mid></Rate></Rates></ExchangeRatesSeries>";
+		String xmlStringMidValueNull = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ExchangeRatesSeries xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Table>A</Table><Country>USA</Country><Symbol>787</Symbol><Code>USD</Code><Rates><Rate><No>3/A/NBP/2002</No><EffectiveDate>2002-01-04</EffectiveDate><Mid></Mid></Rate></Rates></ExchangeRatesSeries>";
 		// throw
-		assertThrows(ParsingException.class, () -> parser.getRateFromString(testString));
+		assertThrows(ParsingException.class, () -> parser.getRateFromString(xmlStringMidValueNull));
 	}
 }

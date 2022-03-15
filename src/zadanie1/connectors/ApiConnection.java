@@ -31,7 +31,7 @@ public class ApiConnection implements ReturnInputString {
 			connection.disconnect();
 			return result;
 		} catch (IOException | CreatingURLException e) {
-			throw new CreatingInputStringException("B³¹d przy tworzeniu inputStreama ", e);
+			throw new CreatingInputStringException("B³¹d przy po³¹czeniu z NBP ", e);
 		}
 	}
 

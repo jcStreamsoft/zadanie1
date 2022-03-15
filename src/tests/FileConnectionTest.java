@@ -21,8 +21,7 @@ import zadanie1.model.Request;
 
 public class FileConnectionTest {
 	@Test
-	public void givenCorrectRequest_whenGetInputStream_thenReturnStream()
-			throws CreatingInputStringException, IOException {
+	public void shouldReturnTrue_whenReadingStringInput() throws CreatingInputStringException, IOException {
 		// given
 		File filePath = new File("fileJson.txt");
 		Request request = new Request.Builder(new BigDecimal(1), Currency.USD).localDate(LocalDate.parse("2002-01-04"))
@@ -33,7 +32,6 @@ public class FileConnectionTest {
 						.collect(Collectors.joining());
 
 		// when
-
 		String result = con.getInputString(request);
 
 		// then

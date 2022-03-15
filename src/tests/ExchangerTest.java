@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import zadanie1.CurrencyCalculator;
 import zadanie1.Exchanger;
 import zadanie1.connectors.ApiConnection;
 import zadanie1.connectors.FileConnection;
@@ -29,48 +28,50 @@ public class ExchangerTest {
 		value = new BigDecimal(1);
 		date = LocalDate.now();
 		currency = Currency.EUR;
-		exchanger = new Exchanger(new JsonParser(), new CurrencyCalculator(), new ApiConnection());
+		exchanger = new Exchanger(new JsonParser(), new ApiConnection());
 	}
 
 	@Test
-	public void givenCorrectRequest_whenExchangeToPln_thenValue() {
+	public void shouldReturnTrue_whenInputIsCorrectOnExchangeToPln() {
 		// given
 		date = LocalDate.parse("2002-01-04");
 		value = new BigDecimal(2);
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 		MathContext m = new MathContext(15);
+		BigDecimal expected = new BigDecimal(0.5658348893792791263509308);
+		expected = expected.round(m);
 		// when
 		BigDecimal result = exchanger.exchangeToPln(request);
 		result = result.round(m);
 		// then
-		BigDecimal expected = new BigDecimal(0.5658348893792791263509308);
-		expected = expected.round(m);
-		// assertEquals(result, expected);
-		assertTrue(result.compareTo(expected) == 0);
+
+		assertEquals(result, expected);
+		// assertTrue(result.compareTo(expected) == 0);
 	}
 
 	@Test
-	public void givenCorrectRequest_whenExchangeFromPln_thenValue() {
+	public void shouldReturnTrue_whenInputIsCorrectOnExchangeFromPln() {
 		// given
 		date = LocalDate.parse("2002-01-04");
 		value = new BigDecimal(2);
-		Request request = new Request.Builder(value, currency).localDate(date).build();
-		MathContext m = new MathContext(1);
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
+		MathContext m = new MathContext(10);
+		BigDecimal expected = new BigDecimal(7.0692);
+		expected = expected.round(m);
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
 		result = result.round(m);
 		// then
-		BigDecimal expected = new BigDecimal(7.0692);
-		expected = expected.round(m);
+
 		// assertEquals(result, expected);
 		assertTrue(result.compareTo(expected) == 0);
 	}
 
 	@Test
-	public void givenRequestNullLocalDate_whenExchangeToPln_thenRetrunNull() {
+	public void shouldReturnNull_whenRequestDateIsNull() {
 		// given
 		date = null;
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -80,10 +81,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenRequestBeforFirstLocalDate_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whenRequestBeforFirstLocalDate() {
 		// given
 		date = LocalDate.parse("2002-01-01");
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -93,10 +94,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenRequestAfterTodayLocalDate_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whenRequestAfterTodayLocalDate() {
 		// given
 		date = LocalDate.now().plusDays(1);
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -106,10 +107,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenRequestNullValue_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whenRequestNullValue() {
 		// given
 		value = null;
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -119,10 +120,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenRequestNegativeValue_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whenRequestNegativeValue() {
 		// given
 		value = new BigDecimal(-1);
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -132,10 +133,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenRequestNullCurrency_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whennRequestNullCurrency() {
 		// given
 		currency = null;
-		Request request = new Request.Builder(value, currency).localDate(date).build();
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -145,10 +146,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenRequestNoPath_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whenNoParser() {
 		// given
-		Request request = new Request.Builder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(new JsonParser(), new CurrencyCalculator(), new FileConnection("fileJson.txt"));
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
+		exchanger = new Exchanger(null, new FileConnection("fileJson.txt"));
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);
@@ -158,36 +159,10 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void givenNoParser_whenExchangeToPln_thenRetrunNull() {
+	public void shouldRetrunNull_whenNoResturnStringInput() {
 		// given
-		Request request = new Request.Builder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(null, new CurrencyCalculator(), new FileConnection("fileJson.txt"));
-
-		// when
-		BigDecimal result = exchanger.exchangeFromPln(request);
-
-		// then
-		assertEquals(result, null);
-	}
-
-	@Test
-	public void givenNoCalculator_whenExchangeToPln_thenRetrunNull() {
-		// given
-		Request request = new Request.Builder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(new JsonParser(), null, new FileConnection("fileJson.txt"));
-
-		// when
-		BigDecimal result = exchanger.exchangeFromPln(request);
-
-		// then
-		assertEquals(result, null);
-	}
-
-	@Test
-	public void givenNoStreams_whenExchangeToPln_thenRetrunNull() {
-		// given
-		Request request = new Request.Builder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(new JsonParser(), new CurrencyCalculator(), null);
+		Request request = Request.getBuilder(value, currency).localDate(date).build();
+		exchanger = new Exchanger(new JsonParser(), null);
 
 		// when
 		BigDecimal result = exchanger.exchangeFromPln(request);

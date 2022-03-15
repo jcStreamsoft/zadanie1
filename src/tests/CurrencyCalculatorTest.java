@@ -12,7 +12,8 @@ import zadanie1.CurrencyCalculator;
 public class CurrencyCalculatorTest {
 
 	@Test
-	public void givenValueRate_whenCalculateFromPln_thenCorrectResult() {
+	public void shouldReturnTrue_whenInputCorrectOnCalculateTFromPln() {
+
 		// given
 		CurrencyCalculator calc = new CurrencyCalculator();
 		BigDecimal value = new BigDecimal(2);
@@ -28,7 +29,7 @@ public class CurrencyCalculatorTest {
 	}
 
 	@Test
-	public void givenValueRate_whenCalculateToPln_thenCorrectResult() {
+	public void shouldReturnTrue_whenInputCorrectOnCalculateToPln() {
 		// given
 		CurrencyCalculator calc = new CurrencyCalculator();
 		BigDecimal value = new BigDecimal(2);

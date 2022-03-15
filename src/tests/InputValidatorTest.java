@@ -23,40 +23,34 @@ public class InputValidatorTest {
 	public void setValidator() {
 		validator = new InputValidator();
 	}
+
 	@Test
-	public void givenValueNull_whenValidate_thenThrowsInputValueNullException() {
-		assertThrows(InputValueNullException.class,() -> validator.validate( new Request
-				.Builder(null, Currency.EUR)
-				.localDate(LocalDate.now())
-				.build()));	
-	}
-	@Test
-	public void givenValueNegative_whenValidate_thenThrowsNegativeValueException() {
-		assertThrows(NegativeValueException.class,() -> validator.validate(new Request
-				.Builder(new BigDecimal(-1), Currency.EUR)
-				.localDate(LocalDate.now())
-				.build()));	
-	}
-	@Test
-	public void givenDateAfterToday_whenValidate_thenThrowsDateAfterTodayException() {
-		assertThrows(DateAfterTodayException.class,() -> validator.validate(new Request
-				.Builder(new BigDecimal(1), Currency.EUR)
-				.localDate(LocalDate.now().plusDays(1))
-				.build()));
-	}
-	@Test
-	public void givenDateBeforeFirst_whenValidate_thenThrowsDateBeforeFirstException() {
-		assertThrows(DateBeforeFirstException.class,() -> validator.validate(new Request
-				.Builder(new BigDecimal(1), Currency.EUR)
-				.localDate(LocalDate.parse("2002-01-01"))
-				.build()));	
+	public void shouldThrowInputValueNullException_whenValueNull() {
+		assertThrows(InputValueNullException.class,() -> validator.validate(
+				Request.getBuilder(null, Currency.EUR).localDate(LocalDate.now()).build()));
 	}
 
 	@Test
-	public void givenCurrencyNull_whenValidate_thenThrowsInputValueNullException() {
-		assertThrows(InputValueNullException.class,() -> validator.validate( new Request
-				.Builder(new BigDecimal(1), null)
-				.localDate(LocalDate.now())
-				.build()));	
+	public void shouldThrowNegativeValueException_whenValueNegative() {
+		assertThrows(NegativeValueException.class, () -> validator.validate(
+				Request.getBuilder(new BigDecimal(-1), Currency.EUR).localDate(LocalDate.now()).build()));
+	}
+
+	@Test
+	public void shouldThrowsDateAfterTodayException_whenDateAfterToday() {
+		assertThrows(DateAfterTodayException.class, () -> validator.validate(
+				Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.now().plusDays(1)).build()));
+	}
+
+	@Test
+	public void shouldThrowDateBeforeFirstException_whenDateBeforeFirst(){
+		assertThrows(DateBeforeFirstException.class, () -> validator.validate(
+				Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.parse("2002-01-01")).build()));
+	}
+
+	@Test
+	public void shouldThrowInputValueNullException_whenCurrencyNull() {
+		assertThrows(InputValueNullException.class, () -> validator.validate(
+				Request.getBuilder(new BigDecimal(1), null).localDate(LocalDate.now()).build()));
 	}
 }

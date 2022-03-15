@@ -1,21 +1,19 @@
 package zadanie1;
 
 import java.math.BigDecimal;
-import java.util.logging.Logger;
 
 import zadanie1.interfaces.Parse;
 import zadanie1.interfaces.ReturnInputString;
 import zadanie1.model.Request;
 
 public class Exchanger {
-	private static final Logger LOG = Logger.getLogger(Exchanger.class.getName());
 	private ReturnInputString streamConnection;
 	private Parse parser;
 	private CurrencyCalculator currencyCalc;
 	private InputValidator validator;
 
-	public Exchanger(Parse parser, CurrencyCalculator calculator, ReturnInputString streamConnection) {
-		this.currencyCalc = calculator;
+	public Exchanger(Parse parser, ReturnInputString streamConnection) {
+		this.currencyCalc = new CurrencyCalculator();
 		this.streamConnection = streamConnection;
 		this.parser = parser;
 		this.validator = new InputValidator();
@@ -28,7 +26,7 @@ public class Exchanger {
 			String inputString = streamConnection.getInputString(request);
 			BigDecimal rate = parser.getRateFromString(inputString);
 			BigDecimal value = request.getValue();
-
+			System.out.println(value + " rate =" + rate);
 			return currencyCalc.calculateToPln(value, rate);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,11 +41,10 @@ public class Exchanger {
 			String inputString = streamConnection.getInputString(request);
 			BigDecimal rate = parser.getRateFromString(inputString);
 			BigDecimal value = request.getValue();
-
+			System.out.println(value + " rate =" + rate);
 			return currencyCalc.calculateFromPln(value, rate);
 		} catch (Exception e) {
 			e.printStackTrace();
-			// LOG.log(Level.WARNING, "{0}", e.toString());
 			return null;
 		}
 	}

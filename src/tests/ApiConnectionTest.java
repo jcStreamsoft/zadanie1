@@ -19,8 +19,7 @@ import zadanie1.model.Request;
 public class ApiConnectionTest {
 
 	@Test
-	public void givenCorrectRequest_whenGetInputStream_thenReturnStream()
-			throws CreatingInputStringException, IOException {
+	public void shouldReturnString_whenStringIsCorrect() throws CreatingInputStringException, IOException {
 		// given
 		File filePath = new File("fileJson.txt");
 		Request request = new Request.Builder(new BigDecimal(1), Currency.USD).localDate(LocalDate.parse("2002-01-04"))

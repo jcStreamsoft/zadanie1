@@ -16,7 +16,7 @@ import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 public class UrlCreatorTest {
 
 	@Test
-	public void givenCorrectValues_whenCreateLastRateUrl_thenTrue() throws CreatingURLException, MalformedURLException {
+	public void shouldReturnTrue_whenCorrectUrlreturned() throws CreatingURLException, MalformedURLException {
 		// given
 		UrlCreator creator = new UrlCreator(Currency.EUR, "json");
 		LocalDate date = LocalDate.parse("2020-01-07");
@@ -28,7 +28,7 @@ public class UrlCreatorTest {
 	}
 
 	@Test
-	public void givenCurrencyNull_whenCreateLastRateUrl_thenThrowsCreatingURLException() {
+	public void shouldThrowCreatingURLException_whenCurrencyNull() {
 		// given
 		UrlCreator creator = new UrlCreator(null, "json");
 		LocalDate date = LocalDate.parse("2020-01-07");
@@ -37,7 +37,7 @@ public class UrlCreatorTest {
 	}
 
 	@Test
-	public void givenResponseTypeNull_whenCreateLastRateUrl_thenThrowsCreatingURLException() {
+	public void shouldThrowCreatingURLException_whenFormatNull() {
 		// given
 		UrlCreator creator = new UrlCreator(Currency.EUR, null);
 		LocalDate date = LocalDate.parse("2020-01-07");
@@ -45,13 +45,13 @@ public class UrlCreatorTest {
 		assertThrows(CreatingURLException.class, () -> creator.createDateRateUrl(date));
 	}
 
-	@Test
-	public void givenDateNullwhenCreateLastRateUrl_thenThrowsCreatingURLException() {
-		// given
-		UrlCreator creator = new UrlCreator(null, "json");
-		LocalDate date = null;
-		// throw
-		assertThrows(CreatingURLException.class, () -> creator.createDateRateUrl(date));
-	}
+//	@Test
+//	public void shouldThrowCreatingURLException_whenDateNull() {
+//		// given
+//		UrlCreator creator = new UrlCreator(Currency.EUR, "json");
+//		LocalDate date = null;
+//		// throw
+//		assertThrows(CreatingURLException.class, () -> creator.createDateRateUrl(date));
+//	}
 
 }

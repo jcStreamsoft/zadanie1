@@ -11,6 +11,7 @@ public class UrlCreator {
 	private final static String NBP_ADRESS = "http://api.nbp.pl/api/exchangerates/rates/a/";
 	private Currency currency;
 	private String responseType;
+	private String newUrl;
 
 	public UrlCreator(Currency currency, String reponseType) {
 		super();
@@ -21,18 +22,21 @@ public class UrlCreator {
 	public URL createLastRateUrl() throws CreatingURLException {
 		try {
 			checkResponseTypeNotNull();
-			return new URL(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType);
+			newUrl = new String(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType);
+			return new URL(newUrl);
 		} catch (MalformedURLException e) {
-			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null", e);
+			throw new CreatingURLException("B³¹d linku " + newUrl, e);
 		}
 	}
 
 	public URL createDateRateUrl(LocalDate localDate) throws CreatingURLException {
+
 		try {
 			checkResponseTypeNotNull();
-			return new URL(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
+			newUrl = new String(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
+			return new URL(newUrl);
 		} catch (MalformedURLException | NullPointerException e) {
-			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null", e);
+			throw new CreatingURLException("B³¹d linku " + newUrl, e);
 		}
 	}
 
