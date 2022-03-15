@@ -44,6 +44,10 @@ public class Request {
 		this.filePath = filePath;
 	}
 
+	public static Builder getBuilder(BigDecimal value, Currency currency) {
+		return new Builder(value, currency);
+	}
+
 	public static class Builder {
 		private LocalDate localDate;
 		private BigDecimal value;

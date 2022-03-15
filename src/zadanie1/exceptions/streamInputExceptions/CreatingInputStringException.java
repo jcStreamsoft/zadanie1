@@ -1,23 +1,23 @@
 package zadanie1.exceptions.streamInputExceptions;
 
-public class CreatingInputStreamException extends Exception{
+public class CreatingInputStringException extends Exception{
 
-	public CreatingInputStreamException() {
+	public CreatingInputStringException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public CreatingInputStreamException(String message, Throwable cause) {
+	public CreatingInputStringException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public CreatingInputStreamException(String message) {
+	public CreatingInputStringException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public CreatingInputStreamException(Throwable cause) {
+	public CreatingInputStringException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}

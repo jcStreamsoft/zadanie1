@@ -1,21 +1,18 @@
 package zadanie1.parsersApi;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
 import zadanie1.exceptions.parserExceptions.ReadingCurrencyRateException;
-import zadanie1.interfaces.NbpApiParser;
+import zadanie1.interfaces.Parse;
 import zadanie1.model.Response;
 
-public class XmlParser implements NbpApiParser {
+public class XmlParser implements Parse {
 
 	private final static String formatType = "xml";
 
@@ -25,26 +22,26 @@ public class XmlParser implements NbpApiParser {
 	}
 
 	@Override
-	public BigDecimal getRateFromStream(InputStream stream) throws ParsingException {
+	public BigDecimal getRateFromStream(String inputString) throws ParsingException {
 		try {
-			Response response = parseData(stream);
+			Response response = parseData(inputString);
 			BigDecimal result = extractRate(response);
 			return result;
 		} catch (Exception e) {
-			throw new ParsingException("B³¹d parsowania danych ->" + e.toString());
+			throw new ParsingException("B³¹d parsowania danych", e);
 		}
 	}
 
-	private Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
-		return new XmlMapper().readValue(stream, Response.class);
+	private Response parseData(String inputString) throws StreamReadException, DatabindException, IOException {
+		return new XmlMapper().readValue(inputString, Response.class);
 	}
 
 	private BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
 		BigDecimal rate = response.getRates().get(0).getMid();
-		if(rate == null) {
+		if (rate == null) {
 			throw new ReadingCurrencyRateException("Nie znaleziono kursu w danych XML");
 		}
-			return rate;
+		return rate;
 	}
-		
+
 }

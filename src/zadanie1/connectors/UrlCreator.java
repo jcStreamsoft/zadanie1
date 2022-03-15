@@ -3,6 +3,7 @@ package zadanie1.connectors;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 
@@ -22,7 +23,7 @@ public class UrlCreator {
 			checkResponseTypeNotNull();
 			return new URL(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType);
 		} catch (MalformedURLException e) {
-			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null");
+			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null", e);
 		}
 	}
 
@@ -30,12 +31,13 @@ public class UrlCreator {
 		try {
 			checkResponseTypeNotNull();
 			return new URL(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
-		} catch (MalformedURLException| NullPointerException  e) {
-			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null");
+		} catch (MalformedURLException | NullPointerException e) {
+			throw new CreatingURLException("Elementami linku nie mog¹ byæ wartoœci null", e);
 		}
 	}
+
 	private void checkResponseTypeNotNull() {
-		if(responseType == null) {
+		if (responseType == null) {
 			throw new NullPointerException();
 		}
 	}

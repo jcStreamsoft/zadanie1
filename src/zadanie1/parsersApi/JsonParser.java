@@ -1,20 +1,17 @@
 package zadanie1.parsersApi;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
-import zadanie1.exceptions.parserExceptions.ReadingCurrencyRateException;
-import zadanie1.interfaces.NbpApiParser;
+import zadanie1.interfaces.Parse;
 import zadanie1.model.Response;
 
-public class JsonParser implements NbpApiParser {
+public class JsonParser implements Parse {
 
 	private final static String formatType = "json";
 
@@ -24,21 +21,21 @@ public class JsonParser implements NbpApiParser {
 	}
 
 	@Override
-	public BigDecimal getRateFromStream(InputStream stream) throws ParsingException {
+	public BigDecimal getRateFromStream(String inputString) throws ParsingException {
 		try {
-			Response response = parseData(stream);
+			Response response = parseData(inputString);
 			BigDecimal result = extractRate(response);
 			return result;
 		} catch (IOException e) {
-			throw new ParsingException("B³¹d parsowania danych ->" + e.toString());
+			throw new ParsingException("B³¹d parsowania danych", e);
 		}
 	}
 
-	private Response parseData(InputStream stream) throws StreamReadException, DatabindException, IOException {
-		return new ObjectMapper().readValue(stream, Response.class);
+	private Response parseData(String inputString) throws StreamReadException, DatabindException, IOException {
+		return new ObjectMapper().readValue(inputString, Response.class);
 	}
 
-	private BigDecimal extractRate(Response response){
+	private BigDecimal extractRate(Response response) {
 		return response.getRates().get(0).getMid();
 	}
 }

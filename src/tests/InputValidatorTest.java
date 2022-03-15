@@ -51,13 +51,7 @@ public class InputValidatorTest {
 				.localDate(LocalDate.parse("2002-01-01"))
 				.build()));	
 	}
-//	@Test
-//	public void givenDateNull_whenValidate_thenThrowsInputValueNullException() {
-//		assertThrows(InputValueNullException.class,() -> validator.validate(new Request
-//				.Builder(new BigDecimal(-1), Currency.EUR)
-//				.localDate(LocalDate.now())
-//				.build()));	
-//	}
+
 	@Test
 	public void givenCurrencyNull_whenValidate_thenThrowsInputValueNullException() {
 		assertThrows(InputValueNullException.class,() -> validator.validate( new Request

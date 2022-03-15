@@ -2,13 +2,12 @@ package zadanie1;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import zadanie1.interfaces.Calculator;
 
-public class CurrencyCalculator implements Calculator {
+public class CurrencyCalculator {
 
 	public BigDecimal calculateToPln(BigDecimal value, BigDecimal rate) {
 		MathContext m = new MathContext(25);
-		BigDecimal result = value.divide(rate,m);
+		BigDecimal result = value.divide(rate, m);
 		return result;
 	}
 

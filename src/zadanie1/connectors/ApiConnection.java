@@ -1,44 +1,43 @@
 package zadanie1.connectors;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
-import zadanie1.enums.Currency;
-import zadanie1.exceptions.streamInputExceptions.ClosingInputStreamException;
-import zadanie1.exceptions.streamInputExceptions.CreatingInputStreamException;
+import zadanie1.exceptions.streamInputExceptions.CreatingInputStringException;
 import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
-import zadanie1.interfaces.Streams;
+import zadanie1.interfaces.ReturnInputString;
 import zadanie1.model.Request;
 
-public class ApiConnection implements Streams {
+public class ApiConnection implements ReturnInputString {
 
 	private HttpURLConnection connection;
 	private UrlCreator urlCreator;
 	private final int MAX_ATTEMPTS = 7;
 
 	@Override
-	public void close() throws ClosingInputStreamException {
-		connection.disconnect();
-	}
-
-	@Override
-	public InputStream getInputStream(Request request) throws CreatingInputStreamException {
+	public String getInputString(Request request) throws CreatingInputStringException {
 		this.urlCreator = new UrlCreator(request.getCurrency(), request.getDataFormat());
 		try {
 			createConnection(request.getLocalDate());
-			
-			return connection.getInputStream();
+
+			String result = createStringFromStream(connection.getInputStream());
+			connection.disconnect();
+			return result;
 		} catch (IOException | CreatingURLException e) {
-			throw new CreatingInputStreamException("B³¹d przy tworzeniu inputStreama ->" + e.toString());
+			throw new CreatingInputStringException("B³¹d przy tworzeniu inputStreama ", e);
 		}
 	}
 
 	private void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
 		URL url = findExistingUrl(localDate);
-	
+
 		createConnectionFromURL(url);
 	}
 
@@ -67,5 +66,10 @@ public class ApiConnection implements Streams {
 		} else {
 			return true;
 		}
+	}
+
+	private String createStringFromStream(InputStream inputStream) {
+		return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines()
+				.collect(Collectors.joining());
 	}
 }
