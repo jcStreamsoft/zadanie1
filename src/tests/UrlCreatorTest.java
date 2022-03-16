@@ -28,15 +28,6 @@ public class UrlCreatorTest {
 	}
 
 	@Test
-	public void shouldThrowCreatingURLException_whenCurrencyNull() {
-		// given
-		UrlCreator creator = new UrlCreator(null, "json");
-		LocalDate date = LocalDate.parse("2020-01-07");
-		// throws
-		assertThrows(CreatingURLException.class, () -> creator.createDateRateUrl(date));
-	}
-
-	@Test
 	public void shouldThrowCreatingURLException_whenFormatNull() {
 		// given
 		UrlCreator creator = new UrlCreator(Currency.EUR, null);

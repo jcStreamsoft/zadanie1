@@ -35,7 +35,7 @@ public class UrlCreator {
 			checkResponseTypeNotNull();
 			newUrl = new String(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
 			return new URL(newUrl);
-		} catch (MalformedURLException | NullPointerException e) {
+		} catch (MalformedURLException e) {
 			throw new CreatingURLException("B³¹d linku " + newUrl, e);
 		}
 	}

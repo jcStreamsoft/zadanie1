@@ -5,9 +5,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import zadanie1.connectors.ApiConnection;
+import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.model.Request;
 import zadanie1.parsersApi.JsonParser;
+import zadanie1.parsersApi.XmlParser;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -24,7 +26,7 @@ public class Main {
 
 		BigDecimal result = nbp.exchangeFromPln(request);
 		System.out.println(result);
-		Exchanger nbp1 = new Exchanger(new JsonParser(), new ApiConnection());
+		Exchanger nbp1 = new Exchanger(new XmlParser(), new FileConnection("fileXml.txt"));
 
 		BigDecimal result2 = nbp1.exchangeToPln(request);
 		System.out.println(result2);

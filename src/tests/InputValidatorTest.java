@@ -12,7 +12,6 @@ import zadanie1.InputValidator;
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.inputExceptions.DateAfterTodayException;
 import zadanie1.exceptions.inputExceptions.DateBeforeFirstException;
-import zadanie1.exceptions.inputExceptions.InputValueNullException;
 import zadanie1.exceptions.inputExceptions.NegativeValueException;
 import zadanie1.model.Request;
 
@@ -25,32 +24,29 @@ public class InputValidatorTest {
 	}
 
 	@Test
-	public void shouldThrowInputValueNullException_whenValueNull() {
-		assertThrows(InputValueNullException.class,() -> validator.validate(
-				Request.getBuilder(null, Currency.EUR).localDate(LocalDate.now()).build()));
-	}
-
-	@Test
 	public void shouldThrowNegativeValueException_whenValueNegative() {
-		assertThrows(NegativeValueException.class, () -> validator.validate(
-				Request.getBuilder(new BigDecimal(-1), Currency.EUR).localDate(LocalDate.now()).build()));
+		// given
+		Request request = Request.getBuilder(new BigDecimal(-1), Currency.EUR).localDate(LocalDate.now()).build();
+		// throws
+		assertThrows(NegativeValueException.class, () -> validator.checkValue(request.getValue()));
 	}
 
 	@Test
 	public void shouldThrowsDateAfterTodayException_whenDateAfterToday() {
-		assertThrows(DateAfterTodayException.class, () -> validator.validate(
-				Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.now().plusDays(1)).build()));
+		// given
+		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.now().plusDays(1))
+				.build();
+		// throws
+		assertThrows(DateAfterTodayException.class, () -> validator.checkDate(request.getLocalDate()));
 	}
 
 	@Test
-	public void shouldThrowDateBeforeFirstException_whenDateBeforeFirst(){
-		assertThrows(DateBeforeFirstException.class, () -> validator.validate(
-				Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.parse("2002-01-01")).build()));
+	public void shouldThrowDateBeforeFirstException_whenDateBeforeFirst() {
+		// given
+		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.parse("2002-01-01"))
+				.build();
+		// throws
+		assertThrows(DateBeforeFirstException.class, () -> validator.checkDate(request.getLocalDate()));
 	}
 
-	@Test
-	public void shouldThrowInputValueNullException_whenCurrencyNull() {
-		assertThrows(InputValueNullException.class, () -> validator.validate(
-				Request.getBuilder(new BigDecimal(1), null).localDate(LocalDate.now()).build()));
-	}
 }
