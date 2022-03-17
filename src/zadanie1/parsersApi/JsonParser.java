@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
 import zadanie1.interfaces.Parse;
+import zadanie1.model.CacheDTO;
 import zadanie1.model.Response;
 
 public class JsonParser implements Parse {
@@ -37,5 +38,9 @@ public class JsonParser implements Parse {
 
 	private BigDecimal extractRate(Response response) {
 		return response.getRates().get(0).getMid();
+	}
+
+	private CacheDTO getDataToCache() {
+		return null;
 	}
 }

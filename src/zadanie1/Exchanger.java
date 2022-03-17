@@ -1,27 +1,38 @@
 package zadanie1;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import zadanie1.exceptions.ExchangerException;
 import zadanie1.exceptions.inputExceptions.DateAfterTodayException;
 import zadanie1.exceptions.inputExceptions.DateBeforeFirstException;
 import zadanie1.exceptions.inputExceptions.InputValueNullException;
 import zadanie1.exceptions.inputExceptions.NegativeValueException;
-import zadanie1.interfaces.InputConnection;
+import zadanie1.interfaces.DataConnection;
 import zadanie1.interfaces.Parse;
 import zadanie1.model.Request;
 
 public class Exchanger {
-	private InputConnection streamConnection;
+	private DataConnection dataConnection;
 	private Parse parser;
 	private CurrencyCalculator currencyCalc;
-	private InputValidator validator;
 
-	public Exchanger(Parse parser, InputConnection streamConnection) {
+	public Exchanger(Parse parser, DataConnection dataConnection) {
 		this.currencyCalc = new CurrencyCalculator();
-		this.streamConnection = streamConnection;
+		this.dataConnection = dataConnection;
 		this.parser = parser;
-		this.validator = new InputValidator();
+	}
+
+	private BigDecimal findDataConnection() {
+		List<DataConnection> lista = new ArrayList<>();
+		for (DataConnection d : lista) {
+			this.dataConnection = d;
+			// data find specific LocalDate
+			exchangeToPln(null);
+		}
+
+		return null;
 	}
 
 	public BigDecimal exchangeToPln(Request request) {
@@ -29,7 +40,7 @@ public class Exchanger {
 			checkValidation(request);
 
 			request.setDataFormat(parser.getFormatType());
-			String inputString = streamConnection.getInputString(request);
+			String inputString = dataConnection.getInputString(request);
 			BigDecimal rate = parser.getRateFromString(inputString);
 			BigDecimal value = request.getValue();
 
@@ -44,7 +55,7 @@ public class Exchanger {
 			checkValidation(request);
 
 			request.setDataFormat(parser.getFormatType());
-			String inputString = streamConnection.getInputString(request);
+			String inputString = dataConnection.getInputString(request);
 			BigDecimal rate = parser.getRateFromString(inputString);
 			BigDecimal value = request.getValue();
 
@@ -56,9 +67,9 @@ public class Exchanger {
 
 	private void checkValidation(Request request)
 			throws NegativeValueException, InputValueNullException, DateBeforeFirstException, DateAfterTodayException {
-		validator.checkDate(request.getLocalDate());
-		validator.checkValue(request.getValue());
-		validator.checkCurrency(request.getCurrency());
+		InputValidator.checkDate(request.getLocalDate());
+		InputValidator.checkValue(request.getValue());
+		InputValidator.checkCurrency(request.getCurrency());
 	}
 
 }

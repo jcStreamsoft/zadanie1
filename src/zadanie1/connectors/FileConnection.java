@@ -10,10 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import zadanie1.exceptions.streamInputExceptions.CreatingInputStringException;
-import zadanie1.interfaces.InputConnection;
+import zadanie1.interfaces.DataConnection;
 import zadanie1.model.Request;
 
-public class FileConnection implements InputConnection {
+public class FileConnection implements DataConnection {
 	private String filePath;
 
 	public FileConnection(String filePath) {
