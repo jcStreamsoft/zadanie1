@@ -10,15 +10,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
-import zadanie1.parsersApi.JsonParser;
+import zadanie1.parsers.apiParsers.ApiJsonParser;
 
 public class JsonParserTest {
 
-	JsonParser parser;
+	ApiJsonParser parser;
 
 	@BeforeMethod
 	public void setValidator() {
-		parser = new JsonParser();
+		parser = new ApiJsonParser();
 	}
 
 	@Test

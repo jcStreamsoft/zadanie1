@@ -4,40 +4,54 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
+import zadanie1.exceptions.parserExceptions.ParsingException;
 import zadanie1.exceptions.streamInputExceptions.CreatingInputStringException;
 import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 import zadanie1.interfaces.DataConnection;
+import zadanie1.interfaces.parsers.ApiParse;
+import zadanie1.model.RateData;
 import zadanie1.model.Request;
 
 public class ApiConnection implements DataConnection {
 
 	private HttpURLConnection connection;
 	private UrlCreator urlCreator;
+	private ApiParse parser;
 	private final int MAX_ATTEMPTS = 7;
 
+	public ApiConnection(ApiParse parser) {
+		super();
+		this.parser = parser;
+	}
+
 	@Override
-	public String getInputString(Request request) throws CreatingInputStringException {
-		this.urlCreator = new UrlCreator(request.getCurrency(), request.getDataFormat());
+	public RateData getRateData(Request request) throws CreatingInputStringException {
+		this.urlCreator = new UrlCreator(request.getCurrency(), parser.getFormatType());
 		try {
 			createConnection(request.getLocalDate());
 
 			String result = createStringFromStream(connection.getInputStream());
+			BigDecimal rate = parser.getRateFromString(result);
+
+			RateData rateData = new RateData(request.getLocalDate(), rate, request.getCurrency());
 			connection.disconnect();
-			return result;
+			return rateData;
 		} catch (IOException | CreatingURLException e) {
+			throw new CreatingInputStringException("B³¹d przy po³¹czeniu z NBP ", e);
+		} catch (ParsingException e) {
 			throw new CreatingInputStringException("B³¹d przy po³¹czeniu z NBP ", e);
 		}
 	}
 
 	private void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
-		URL url = findExistingUrl(localDate);
-
+		URL url = urlCreator.createDateRateUrl(localDate);
 		createConnectionFromURL(url);
 	}
 
@@ -71,5 +85,11 @@ public class ApiConnection implements DataConnection {
 	private String createStringFromStream(InputStream inputStream) {
 		return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines()
 				.collect(Collectors.joining());
+	}
+
+	@Override
+	public RateData findRateData(Request request) throws CreatingInputStringException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,4 +1,4 @@
-package zadanie1.parsersApi;
+package zadanie1.parsers.apiParsers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,10 +9,10 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
 import zadanie1.exceptions.parserExceptions.ReadingCurrencyRateException;
-import zadanie1.interfaces.Parse;
+import zadanie1.interfaces.parsers.ApiParse;
 import zadanie1.model.Response;
 
-public class XmlParser implements Parse {
+public class ApiXmlParser implements ApiParse {
 
 	private final static String formatType = "xml";
 

@@ -1,4 +1,4 @@
-package zadanie1.parsersApi;
+package zadanie1.parsers.fileParsers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -8,11 +8,10 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
-import zadanie1.interfaces.Parse;
-import zadanie1.model.CacheDTO;
+import zadanie1.interfaces.parsers.FileParse;
 import zadanie1.model.Response;
 
-public class JsonParser implements Parse {
+public class FileJsonParser implements FileParse {
 
 	private final static String formatType = "json";
 
@@ -40,7 +39,4 @@ public class JsonParser implements Parse {
 		return response.getRates().get(0).getMid();
 	}
 
-	private CacheDTO getDataToCache() {
-		return null;
-	}
 }

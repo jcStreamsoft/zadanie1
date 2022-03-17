@@ -1,7 +1,8 @@
 package zadanie1.interfaces;
 
-import java.time.LocalDate;
+import zadanie1.model.RateData;
 
 public interface Savable {
-	public void saveData(String currencyCode, LocalDate date, String dataString);
+	public void saveData(RateData rateData);
+
 }

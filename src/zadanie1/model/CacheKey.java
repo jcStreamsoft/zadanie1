@@ -2,12 +2,14 @@ package zadanie1.model;
 
 import java.time.LocalDate;
 
+import zadanie1.enums.Currency;
+
 public class CacheKey {
 
 	public LocalDate key1;
-	public String key2;
+	public Currency key2;
 
-	public CacheKey(LocalDate key1, String key2) {
+	public CacheKey(LocalDate key1, Currency key2) {
 		this.key1 = key1;
 		this.key2 = key2;
 	}

@@ -15,7 +15,7 @@ import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.ExchangerException;
 import zadanie1.model.Request;
-import zadanie1.parsersApi.JsonParser;
+import zadanie1.parsers.apiParsers.ApiJsonParser;
 
 public class ExchangerTest {
 	Exchanger exchanger;
@@ -28,7 +28,7 @@ public class ExchangerTest {
 		value = new BigDecimal(1);
 		date = LocalDate.now();
 		currency = Currency.EUR;
-		exchanger = new Exchanger(new JsonParser(), new ApiConnection());
+		exchanger = new Exchanger(new ApiJsonParser(), new ApiConnection());
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class ExchangerTest {
 	public void shouldThrowExchangerException_whenNoResturnStringInput() {
 		// given
 		Request request = Request.getBuilder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(new JsonParser(), null);
+		exchanger = new Exchanger(new ApiJsonParser(), null);
 
 		// throws
 		assertThrows(ExchangerException.class, () -> exchanger.exchangeFromPln(request));
