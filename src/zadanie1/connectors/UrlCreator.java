@@ -5,6 +5,7 @@ import java.net.URL;
 import java.time.LocalDate;
 
 import zadanie1.enums.Currency;
+import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 
 public class UrlCreator {
 	private final static String NBP_ADRESS = "http://api.nbp.pl/api/exchangerates/rates/a/";
@@ -18,22 +19,22 @@ public class UrlCreator {
 		this.responseType = reponseType;
 	}
 
-	public URL createLastRateUrl() {
+	public URL createLastRateUrl() throws CreatingURLException {
 		try {
 			newUrl = new String(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType);
 			return new URL(newUrl);
 		} catch (MalformedURLException e) {
-			return null;
+			throw new CreatingURLException("B³¹d tworzenia linku", e);
 		}
 	}
 
-	public URL createDateRateUrl(LocalDate localDate) {
+	public URL createDateRateUrl(LocalDate localDate) throws CreatingURLException {
 
 		try {
 			newUrl = new String(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
 			return new URL(newUrl);
 		} catch (MalformedURLException e) {
-			return null;
+			throw new CreatingURLException("B³¹d tworzenia linku", e);
 		}
 	}
 

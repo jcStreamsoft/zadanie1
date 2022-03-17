@@ -12,6 +12,10 @@ public class Rate {
 	String currency;
 	@JacksonXmlProperty(localName = "Mid")
 	BigDecimal mid;
+	@JacksonXmlProperty(localName = "Country")
+	String country;
+	@JacksonXmlProperty(localName = "Symbol")
+	int symbol;
 
 	public Rate() {
 		super();
@@ -40,4 +44,25 @@ public class Rate {
 	public void setMid(String mid) {
 		this.mid = new BigDecimal(mid);
 	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public int getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(int symbol) {
+		this.symbol = symbol;
+	}
+
+	public void setMid(BigDecimal mid) {
+		this.mid = mid;
+	}
+
 }

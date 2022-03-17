@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import zadanie1.Exchanger;
 import zadanie1.connectors.ApiConnection;
-import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.ExchangerException;
 import zadanie1.model.Request;
@@ -28,7 +27,7 @@ public class ExchangerTest {
 		value = new BigDecimal(1);
 		date = LocalDate.now();
 		currency = Currency.EUR;
-		exchanger = new Exchanger(new ApiJsonParser(), new ApiConnection());
+		exchanger = new Exchanger(new ApiConnection(new ApiJsonParser()));
 	}
 
 	@Test
@@ -111,23 +110,4 @@ public class ExchangerTest {
 		assertThrows(ExchangerException.class, () -> exchanger.exchangeFromPln(request));
 	}
 
-	@Test
-	public void shouldThrowExchangerException_whenNoParser() {
-		// given
-		Request request = Request.getBuilder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(null, new FileConnection("fileJson.txt"));
-
-		// throws
-		assertThrows(ExchangerException.class, () -> exchanger.exchangeFromPln(request));
-	}
-
-	@Test
-	public void shouldThrowExchangerException_whenNoResturnStringInput() {
-		// given
-		Request request = Request.getBuilder(value, currency).localDate(date).build();
-		exchanger = new Exchanger(new ApiJsonParser(), null);
-
-		// throws
-		assertThrows(ExchangerException.class, () -> exchanger.exchangeFromPln(request));
-	}
 }

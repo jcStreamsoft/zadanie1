@@ -44,7 +44,7 @@ public class Exchanger {
 			RateData rateData = dataConnection.getRateData(request);
 
 			BigDecimal value = request.getValue();
-			// cache.saveData(rateData);
+			cache.saveData(rateData);
 			return currencyCalc.calculateToPln(value, rateData.getRate());
 		} catch (Exception e) {
 			throw new ExchangerException("Wyst¹pi³ b³¹d.", e);
@@ -58,7 +58,7 @@ public class Exchanger {
 			RateData rateData = dataConnection.getRateData(request);
 
 			BigDecimal value = request.getValue();
-			// cache.saveData(rateData);
+			cache.saveData(rateData);
 			return currencyCalc.calculateFromPln(value, rateData.getRate());
 		} catch (Exception e) {
 			throw new ExchangerException("Wyst¹pi³ b³¹d.", e);
@@ -70,6 +70,10 @@ public class Exchanger {
 		InputValidator.checkDate(request.getLocalDate());
 		InputValidator.checkValue(request.getValue());
 		InputValidator.checkCurrency(request.getCurrency());
+	}
+
+	public void printCache() {
+		cache.print();
 	}
 
 }

@@ -28,4 +28,10 @@ public class RateData {
 	public Currency getCurrency() {
 		return currency;
 	}
+
+	@Override
+	public String toString() {
+		return "[date=" + date + ", rate=" + rate + ", currency=" + currency + "]";
+	}
+
 }
