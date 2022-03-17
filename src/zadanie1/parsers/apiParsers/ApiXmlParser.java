@@ -1,7 +1,6 @@
 package zadanie1.parsers.apiParsers;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -10,7 +9,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import zadanie1.exceptions.parserExceptions.ParsingException;
 import zadanie1.exceptions.parserExceptions.ReadingCurrencyRateException;
 import zadanie1.interfaces.parsers.ApiParse;
-import zadanie1.model.Response;
+import zadanie1.model.apiModel.Rate;
+import zadanie1.model.apiModel.RatesTable;
 
 public class ApiXmlParser implements ApiParse {
 
@@ -22,26 +22,22 @@ public class ApiXmlParser implements ApiParse {
 	}
 
 	@Override
-	public BigDecimal getRateFromString(String inputString) throws ParsingException {
+	public Rate getRateFromString(String inputString) throws ParsingException {
 		try {
-			Response response = parseData(inputString);
-			BigDecimal result = extractRate(response);
+			RatesTable ratesTable = parseData(inputString);
+			Rate result = extractRate(ratesTable);
 			return result;
 		} catch (Exception e) {
 			throw new ParsingException("B³¹d parsowania danych", e);
 		}
 	}
 
-	private Response parseData(String inputString) throws StreamReadException, DatabindException, IOException {
-		return new XmlMapper().readValue(inputString, Response.class);
+	private RatesTable parseData(String inputString) throws StreamReadException, DatabindException, IOException {
+		return new XmlMapper().readValue(inputString, RatesTable.class);
 	}
 
-	private BigDecimal extractRate(Response response) throws ReadingCurrencyRateException {
-		BigDecimal rate = response.getRates().get(0).getMid();
-		if (rate == null) {
-			throw new ReadingCurrencyRateException("Nie znaleziono kursu w danych XML");
-		}
-		return rate;
+	private Rate extractRate(RatesTable ratesTable) throws ReadingCurrencyRateException {
+		return ratesTable.getRates().get(0);
 	}
 
 }

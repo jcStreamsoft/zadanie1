@@ -9,8 +9,7 @@ import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.model.Request;
 import zadanie1.parsers.apiParsers.ApiJsonParser;
-import zadanie1.parsers.apiParsers.ApiXmlParser;
-import zadanie1.parsers.fileParsers.FileJsonParser;
+import zadanie1.parsers.fileParsers.FileXmlParser;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -20,14 +19,14 @@ public class Main {
 
 	public static void test1() throws IOException {
 		BigDecimal value = new BigDecimal(2);
-		LocalDate date = LocalDate.parse("2002-01-04");
+		LocalDate date = LocalDate.parse("2022-03-07");
 
-		Exchanger nbp = new Exchanger(new ApiJsonParser(), new ApiConnection(new ApiJsonParser()));
+		Exchanger nbp = new Exchanger(new ApiConnection(new ApiJsonParser()));
 		Request request = Request.getBuilder(value, Currency.EUR).localDate(date).build();
 
-		BigDecimal result = nbp.exchangeFromPln(request);
+		BigDecimal result = nbp.exchangeToPln(request);
 		System.out.println(result);
-		Exchanger nbp1 = new Exchanger(new ApiXmlParser(), new FileConnection(new FileJsonParser(), "fileJson.txt"));
+		Exchanger nbp1 = new Exchanger(new FileConnection(new FileXmlParser(), "fileArrayXml.txt"));
 
 		BigDecimal result2 = nbp1.exchangeToPln(request);
 		System.out.println(result2);

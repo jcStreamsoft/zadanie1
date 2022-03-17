@@ -1,4 +1,4 @@
-package zadanie1.model;
+package zadanie1.model.apiModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

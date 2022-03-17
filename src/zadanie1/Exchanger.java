@@ -11,22 +11,18 @@ import zadanie1.exceptions.inputExceptions.DateBeforeFirstException;
 import zadanie1.exceptions.inputExceptions.InputValueNullException;
 import zadanie1.exceptions.inputExceptions.NegativeValueException;
 import zadanie1.interfaces.DataConnection;
-import zadanie1.interfaces.parsers.Parse;
 import zadanie1.model.RateData;
 import zadanie1.model.Request;
 
 public class Exchanger {
 	private DataConnection dataConnection;
-	private Parse parser;
 	private CurrencyCalculator currencyCalc;
 	private static CachedConnection cache;
 
-	public Exchanger(Parse parser, DataConnection dataConnection) {
+	public Exchanger(DataConnection dataConnection) {
 		this.currencyCalc = new CurrencyCalculator();
 		this.dataConnection = dataConnection;
-		this.parser = parser;
 		this.cache = new CachedConnection();
-
 	}
 
 	private BigDecimal findDataConnection() {

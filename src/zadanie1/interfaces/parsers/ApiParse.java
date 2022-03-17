@@ -1,8 +1,7 @@
 package zadanie1.interfaces.parsers;
 
-import java.math.BigDecimal;
-
 import zadanie1.exceptions.parserExceptions.ParsingException;
+import zadanie1.model.apiModel.Rate;
 
 public interface ApiParse extends Parse {
 
@@ -10,5 +9,5 @@ public interface ApiParse extends Parse {
 	public String getFormatType();
 
 	@Override
-	public BigDecimal getRateFromString(String inputString) throws ParsingException;
+	public Rate getRateFromString(String inputString) throws ParsingException;
 }

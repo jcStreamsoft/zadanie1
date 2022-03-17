@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
@@ -16,6 +16,8 @@ import zadanie1.interfaces.DataConnection;
 import zadanie1.interfaces.parsers.FileParse;
 import zadanie1.model.RateData;
 import zadanie1.model.Request;
+import zadanie1.model.fileModel.Rate;
+import zadanie1.model.fileModel.RatesTable;
 
 public class FileConnection implements DataConnection {
 
@@ -34,9 +36,13 @@ public class FileConnection implements DataConnection {
 			InputStream inputStream = new FileInputStream(inputFile);
 
 			String result = createStringFromStream(inputStream);
-			BigDecimal rate = parser.getRateFromString(result);
+			List<RatesTable> rates = parser.getRateFromString(result);
 
-			RateData rateData = new RateData(request.getLocalDate(), rate, request.getCurrency());
+			Rate rate = findRate(rates, request);
+			RateData rateData = null;
+			if (rate != null) {
+				rateData = new RateData(request.getLocalDate(), rate.getMid(), request.getCurrency());
+			}
 			inputStream.close();
 			return rateData;
 		} catch (IOException e) {
@@ -44,6 +50,23 @@ public class FileConnection implements DataConnection {
 		} catch (ParsingException e) {
 			throw new CreatingInputStringException("B³¹d przy parsowaniu : " + filePath, e);
 		}
+	}
+
+	private Rate findRate(List<RatesTable> list, Request request) {
+		for (int i = 0; i < list.size(); i++) {
+			RatesTable rt = list.get(i);
+			if (rt.getEffectiveDate().isEqual(request.getLocalDate())) {
+				List<Rate> rates = rt.getRates();
+				for (int j = 0; j < rates.size(); j++) {
+					Rate r = rates.get(j);
+					if (r.getCode().equals(request.getCurrency().getCode().toUpperCase())) {
+						return r;
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	private String createStringFromStream(InputStream inputStream) {

@@ -2,14 +2,17 @@ package zadanie1.parsers.fileParsers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import zadanie1.exceptions.parserExceptions.ParsingException;
 import zadanie1.interfaces.parsers.FileParse;
-import zadanie1.model.Response;
+import zadanie1.model.fileModel.RatesTable;
 
 public class FileJsonParser implements FileParse {
 
@@ -21,22 +24,25 @@ public class FileJsonParser implements FileParse {
 	}
 
 	@Override
-	public BigDecimal getRateFromString(String inputString) throws ParsingException {
+	public List<RatesTable> getRateFromString(String inputString) throws ParsingException {
 		try {
-			Response response = parseData(inputString);
-			BigDecimal result = extractRate(response);
-			return result;
+
+			List<RatesTable> lista = parseData(inputString);
+
+			// RatesTable ratesTable = parseDataX(inputString);
+			// BigDecimal result = extractRate(ratesTable);
+			return lista;
 		} catch (IOException e) {
 			throw new ParsingException("B³¹d parsowania danych", e);
 		}
 	}
 
-	private Response parseData(String inputString) throws StreamReadException, DatabindException, IOException {
-		return new ObjectMapper().readValue(inputString, Response.class);
+	private BigDecimal extractRate(RatesTable ratesTable) {
+		return ratesTable.getRates().get(0).getMid();
 	}
 
-	private BigDecimal extractRate(Response response) {
-		return response.getRates().get(0).getMid();
+	private ArrayList<RatesTable> parseData(String inputString) throws JsonMappingException, JsonProcessingException {
+		return (ArrayList<RatesTable>) new ObjectMapper().readValue(inputString, new TypeReference<List<RatesTable>>() {
+		});
 	}
-
 }

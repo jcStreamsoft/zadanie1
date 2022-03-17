@@ -1,9 +1,9 @@
-package zadanie1.model;
+package zadanie1.model.apiModel;
 
 import java.util.ArrayList;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public class Response {
+public class RatesTable {
 	@JacksonXmlProperty(localName = "Table")
 	char table;
 	@JacksonXmlProperty(localName = "Country")
@@ -17,7 +17,7 @@ public class Response {
 	@JacksonXmlProperty(localName = "Rates")
 	ArrayList<Rate> rates;
 
-	public Response() {
+	public RatesTable() {
 		super();
 	}
 

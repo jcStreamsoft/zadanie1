@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +17,7 @@ import zadanie1.interfaces.DataConnection;
 import zadanie1.interfaces.parsers.ApiParse;
 import zadanie1.model.RateData;
 import zadanie1.model.Request;
+import zadanie1.model.apiModel.Rate;
 
 public class ApiConnection implements DataConnection {
 
@@ -38,9 +38,9 @@ public class ApiConnection implements DataConnection {
 			createConnection(request.getLocalDate());
 
 			String result = createStringFromStream(connection.getInputStream());
-			BigDecimal rate = parser.getRateFromString(result);
+			Rate rate = parser.getRateFromString(result);
 
-			RateData rateData = new RateData(request.getLocalDate(), rate, request.getCurrency());
+			RateData rateData = new RateData(request.getLocalDate(), rate.getMid(), request.getCurrency());
 			connection.disconnect();
 			return rateData;
 		} catch (IOException | CreatingURLException e) {
