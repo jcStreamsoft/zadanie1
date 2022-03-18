@@ -19,7 +19,7 @@ public class InputValidatorTest {
 	@Test
 	public void shouldThrowNegativeValueException_whenValueNegative() {
 		// given
-		Request request = Request.getBuilder(new BigDecimal(-1), Currency.EUR).localDate(LocalDate.now()).build();
+		Request request = Request.getBuilder(new BigDecimal(-1), Currency.EUR).date(LocalDate.now()).build();
 		// throws
 		assertThrows(NegativeValueException.class, () -> InputValidator.checkValue(request.getValue()));
 	}
@@ -27,8 +27,7 @@ public class InputValidatorTest {
 	@Test
 	public void shouldThrowsDateAfterTodayException_whenDateAfterToday() {
 		// given
-		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.now().plusDays(1))
-				.build();
+		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).date(LocalDate.now().plusDays(1)).build();
 		// throws
 		assertThrows(DateAfterTodayException.class, () -> InputValidator.checkDate(request.getDate()));
 	}
@@ -36,10 +35,9 @@ public class InputValidatorTest {
 	@Test
 	public void shouldThrowDateBeforeFirstException_whenDateBeforeFirst() {
 		// given
-		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.parse("2002-01-01"))
+		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).date(LocalDate.parse("2002-01-01"))
 				.build();
 		// throws
 		assertThrows(DateBeforeFirstException.class, () -> InputValidator.checkDate(request.getDate()));
 	}
-
 }

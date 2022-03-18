@@ -47,7 +47,7 @@ public class ApiConnection implements DataConnection {
 		} catch (IOException | CreatingURLException e) {
 			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
 		} catch (ParsingException e) {
-			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
+			throw new ReadingRateDataException("B³¹d przy parsowaniu danych z NBP ", e);
 		}
 	}
 
@@ -58,19 +58,19 @@ public class ApiConnection implements DataConnection {
 			LocalDate date = findOlderExistingDate(request, request.getDate());
 			RateData rateData = null;
 			if (date != null) {
-				createConnectionFromURL(createURL(request.getDate()));
+				createConnectionFromURL(createURL(date));
 
 				String result = createStringFromStream(connection.getInputStream());
 				connection.disconnect();
 
 				Rate rate = parser.getRateFromString(result);
-				rateData = new RateData(request.getDate(), rate.getMid(), request.getCurrency());
+				rateData = new RateData(date, rate.getMid(), request.getCurrency());
 			}
 			return rateData;
 		} catch (IOException | CreatingURLException e) {
 			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
 		} catch (ParsingException e) {
-			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
+			throw new ReadingRateDataException("B³¹d przy parsowaniu danych z NBP ", e);
 		}
 	}
 

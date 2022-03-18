@@ -2,6 +2,7 @@ package zadanie1.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import zadanie1.enums.Currency;
 
@@ -34,4 +35,20 @@ public class RateData {
 		return "[date=" + date + ", rate=" + rate + ", currency=" + currency + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(currency, date, rate);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RateData other = (RateData) obj;
+		return currency == other.currency && Objects.equals(date, other.date) && Objects.equals(rate, other.rate);
+	}
 }

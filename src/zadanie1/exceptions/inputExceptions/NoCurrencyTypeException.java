@@ -1,9 +1,15 @@
 package zadanie1.exceptions.inputExceptions;
 
-public class NoCurrencyTypeException extends Exception{
+public class NoCurrencyTypeException extends Exception {
 
 	public NoCurrencyTypeException() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public NoCurrencyTypeException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,5 +27,4 @@ public class NoCurrencyTypeException extends Exception{
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
-	
 }

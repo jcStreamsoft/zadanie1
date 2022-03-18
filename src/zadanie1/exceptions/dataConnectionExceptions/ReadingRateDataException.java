@@ -1,9 +1,15 @@
 package zadanie1.exceptions.dataConnectionExceptions;
 
-public class ReadingRateDataException extends Exception{
+public class ReadingRateDataException extends Exception {
 
 	public ReadingRateDataException() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ReadingRateDataException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 

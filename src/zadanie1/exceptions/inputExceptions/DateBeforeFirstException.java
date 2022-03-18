@@ -1,9 +1,15 @@
 package zadanie1.exceptions.inputExceptions;
 
-public class DateBeforeFirstException extends Exception{
+public class DateBeforeFirstException extends Exception {
 
 	public DateBeforeFirstException() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public DateBeforeFirstException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,5 +27,4 @@ public class DateBeforeFirstException extends Exception{
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
-	
 }

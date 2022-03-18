@@ -1,9 +1,15 @@
 package zadanie1.exceptions.inputExceptions;
 
-public class NegativeValueException extends Exception{
+public class NegativeValueException extends Exception {
 
 	public NegativeValueException() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public NegativeValueException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,5 +27,4 @@ public class NegativeValueException extends Exception{
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
-	
 }

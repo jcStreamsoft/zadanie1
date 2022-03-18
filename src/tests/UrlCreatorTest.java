@@ -1,7 +1,6 @@
 package tests;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertThrows;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,7 +17,8 @@ public class UrlCreatorTest {
 	@Test
 	public void shouldReturnTrue_whenCorrectUrlreturned() throws CreatingURLException, MalformedURLException {
 		// given
-		UrlCreator creator = new UrlCreator(Currency.EUR, "json");
+		String code = Currency.EUR.getCode();
+		UrlCreator creator = new UrlCreator(code, "json");
 		LocalDate date = LocalDate.parse("2020-01-07");
 		URL expected = new URL("http://api.nbp.pl/api/exchangerates/rates/a/eur/2020-01-07/?format=json");
 		// when
@@ -26,23 +26,4 @@ public class UrlCreatorTest {
 		// then
 		assertEquals(url, expected);
 	}
-
-	@Test
-	public void shouldThrowCreatingURLException_whenFormatNull() {
-		// given
-		UrlCreator creator = new UrlCreator(Currency.EUR, null);
-		LocalDate date = LocalDate.parse("2020-01-07");
-		// throws
-		assertThrows(CreatingURLException.class, () -> creator.createDateRateUrl(date));
-	}
-
-//	@Test
-//	public void shouldThrowCreatingURLException_whenDateNull() {
-//		// given
-//		UrlCreator creator = new UrlCreator(Currency.EUR, "json");
-//		LocalDate date = null;
-//		// throw
-//		assertThrows(CreatingURLException.class, () -> creator.createDateRateUrl(date));
-//	}
-
 }

@@ -24,48 +24,7 @@ public class Exchanger {
 	public Exchanger(List<DataConnection> dataConnections) {
 		this.currencyCalc = new CurrencyCalculator();
 		this.dataConnections = dataConnections;
-		this.cache = new CachedConnection();
-	}
-
-	private RateData findRateForPreciseDate(Request request) {
-		for (DataConnection dataConnection : dataConnections) {
-
-			RateData rateData = null;
-			try {
-				rateData = dataConnection.getRateData(request);
-			} catch (ReadingRateDataException e) {
-				continue;
-			}
-
-			if (rateData != null) {
-				return rateData;
-			}
-		}
-		return null;
-	}
-
-	private RateData findOlderRate(Request request) {
-		List<DataConnection> lista = new ArrayList<>();
-		for (DataConnection dataConnection : lista) {
-			RateData rateData = null;
-			try {
-				rateData = dataConnection.getOlderRateData(request);
-			} catch (ReadingRateDataException e) {
-				continue;
-			}
-			if (rateData != null) {
-				return rateData;
-			}
-		}
-		return null;
-	}
-
-	private RateData findRate(Request request) throws ReadingRateDataException {
-		RateData rateData = findRateForPreciseDate(request);
-		if (rateData == null) {
-			rateData = findOlderRate(request);
-		}
-		return rateData;
+		cache = new CachedConnection();
 	}
 
 	public BigDecimal exchangeToPln(Request request) {
@@ -102,6 +61,45 @@ public class Exchanger {
 		}
 	}
 
+	private RateData findRate(Request request) throws ReadingRateDataException {
+		RateData rateData = findRateForPreciseDate(request);
+		if (rateData == null) {
+			rateData = findOlderRate(request);
+		}
+		return rateData;
+	}
+
+	private RateData findRateForPreciseDate(Request request) {
+		for (DataConnection dataConnection : dataConnections) {
+			;
+			try {
+				RateData rateData = dataConnection.getRateData(request);
+				if (rateData != null) {
+					return rateData;
+				}
+			} catch (ReadingRateDataException e) {
+				continue;
+			}
+		}
+		return null;
+	}
+
+	private RateData findOlderRate(Request request) {
+		List<DataConnection> lista = new ArrayList<>();
+		for (DataConnection dataConnection : lista) {
+			try {
+				RateData rateData = null;
+				rateData = dataConnection.getOlderRateData(request);
+				if (rateData != null) {
+					return rateData;
+				}
+			} catch (ReadingRateDataException e) {
+				continue;
+			}
+		}
+		return null;
+	}
+
 	private void checkValidation(Request request)
 			throws NegativeValueException, InputValueNullException, DateBeforeFirstException, DateAfterTodayException {
 		InputValidator.checkDate(request.getDate());
@@ -112,5 +110,4 @@ public class Exchanger {
 	public void printCache() {
 		cache.print();
 	}
-
 }

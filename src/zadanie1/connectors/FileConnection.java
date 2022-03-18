@@ -19,6 +19,7 @@ public class FileConnection implements DataConnection {
 	private FileReader fileReader;
 	private String filePath;
 	private static final int MAX_ATTEMPTS = 7;
+	private LocalDate newDate;
 
 	public FileConnection(FileParse parser, String filePath) {
 		this.fileReader = new FileReader(filePath);
@@ -53,7 +54,7 @@ public class FileConnection implements DataConnection {
 			Rate rate = findOlderDateRate(rates, request, request.getDate());
 			RateData rateData = null;
 			if (rate != null) {
-				rateData = new RateData(request.getDate(), rate.getMid(), request.getCurrency());
+				rateData = new RateData(newDate, rate.getMid(), request.getCurrency());
 			}
 			return rateData;
 		} catch (IOException e) {
@@ -78,7 +79,7 @@ public class FileConnection implements DataConnection {
 
 	private Rate findRate(List<RatesTable> ratesTable, Request request, LocalDate date) {
 		for (RatesTable rateTable : ratesTable) {
-			if (dateEquals(rateTable, request.getDate())) {
+			if (dateEquals(rateTable, date)) {
 				for (Rate rate : rateTable.getRates()) {
 					if (currencyCodeEquals(rate, request)) {
 						return rate;
@@ -91,7 +92,7 @@ public class FileConnection implements DataConnection {
 
 	public Rate findOlderDateRate(List<RatesTable> ratesTable, Request request, LocalDate date) {
 		for (int i = 1; i < MAX_ATTEMPTS; i++) {
-			LocalDate newDate = date.minusDays(i);
+			newDate = date.minusDays(i);
 			Rate rate = findRate(ratesTable, request, newDate);
 			if (rate != null) {
 				return rate;

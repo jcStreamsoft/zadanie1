@@ -1,9 +1,14 @@
 package zadanie1.exceptions.parserExceptions;
 
-public class ParsingException extends Exception{
+public class ParsingException extends Exception {
 
 	public ParsingException() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ParsingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,6 +26,4 @@ public class ParsingException extends Exception{
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
-	
-
 }
