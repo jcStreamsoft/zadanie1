@@ -30,7 +30,7 @@ public class InputValidatorTest {
 		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.now().plusDays(1))
 				.build();
 		// throws
-		assertThrows(DateAfterTodayException.class, () -> InputValidator.checkDate(request.getLocalDate()));
+		assertThrows(DateAfterTodayException.class, () -> InputValidator.checkDate(request.getDate()));
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class InputValidatorTest {
 		Request request = Request.getBuilder(new BigDecimal(1), Currency.EUR).localDate(LocalDate.parse("2002-01-01"))
 				.build();
 		// throws
-		assertThrows(DateBeforeFirstException.class, () -> InputValidator.checkDate(request.getLocalDate()));
+		assertThrows(DateBeforeFirstException.class, () -> InputValidator.checkDate(request.getDate()));
 	}
 
 }

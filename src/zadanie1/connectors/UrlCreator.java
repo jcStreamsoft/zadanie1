@@ -4,24 +4,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 
-import zadanie1.enums.Currency;
-import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
+import zadanie1.exceptions.dataConnectionExceptions.CreatingURLException;
 
 public class UrlCreator {
 	private final static String NBP_ADRESS = "http://api.nbp.pl/api/exchangerates/rates/a/";
-	private Currency currency;
+	private String currencyCode;
 	private String responseType;
 	private String newUrl;
 
-	public UrlCreator(Currency currency, String reponseType) {
+	public UrlCreator(String currencyCode, String reponseType) {
 		super();
-		this.currency = currency;
+		this.currencyCode = currencyCode;
 		this.responseType = reponseType;
 	}
 
 	public URL createLastRateUrl() throws CreatingURLException {
 		try {
-			newUrl = new String(NBP_ADRESS + currency.getCode() + "/last/1/?format=" + responseType);
+			newUrl = new String(NBP_ADRESS + currencyCode + "/last/1/?format=" + responseType);
 			return new URL(newUrl);
 		} catch (MalformedURLException e) {
 			throw new CreatingURLException("B³¹d tworzenia linku", e);
@@ -29,13 +28,11 @@ public class UrlCreator {
 	}
 
 	public URL createDateRateUrl(LocalDate localDate) throws CreatingURLException {
-
 		try {
-			newUrl = new String(NBP_ADRESS + currency.getCode() + "/" + localDate + "/?format=" + responseType);
+			newUrl = new String(NBP_ADRESS + currencyCode + "/" + localDate + "/?format=" + responseType);
 			return new URL(newUrl);
 		} catch (MalformedURLException e) {
 			throw new CreatingURLException("B³¹d tworzenia linku", e);
 		}
 	}
-
 }

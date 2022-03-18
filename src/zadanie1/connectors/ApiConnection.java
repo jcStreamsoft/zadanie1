@@ -10,9 +10,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
+import zadanie1.exceptions.dataConnectionExceptions.CreatingURLException;
+import zadanie1.exceptions.dataConnectionExceptions.ReadingRateDataException;
 import zadanie1.exceptions.parserExceptions.ParsingException;
-import zadanie1.exceptions.streamInputExceptions.CreatingInputStringException;
-import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
 import zadanie1.interfaces.DataConnection;
 import zadanie1.interfaces.parsers.ApiParse;
 import zadanie1.model.RateData;
@@ -24,7 +24,7 @@ public class ApiConnection implements DataConnection {
 	private HttpURLConnection connection;
 	private UrlCreator urlCreator;
 	private ApiParse parser;
-	private final int MAX_ATTEMPTS = 7;
+	private static final int MAX_ATTEMPTS = 7;
 
 	public ApiConnection(ApiParse parser) {
 		super();
@@ -32,44 +32,55 @@ public class ApiConnection implements DataConnection {
 	}
 
 	@Override
-	public RateData getRateData(Request request) throws CreatingInputStringException {
-		this.urlCreator = new UrlCreator(request.getCurrency(), parser.getFormatType());
+	public RateData getRateData(Request request) throws ReadingRateDataException {
+		this.urlCreator = new UrlCreator(request.getCurrencyCode(), parser.getFormatType());
 		try {
-			createConnection(request.getLocalDate());
+			createConnectionFromURL(createURL(request.getDate()));
 
 			String result = createStringFromStream(connection.getInputStream());
-			Rate rate = parser.getRateFromString(result);
-
-			RateData rateData = new RateData(request.getLocalDate(), rate.getMid(), request.getCurrency());
 			connection.disconnect();
+
+			Rate rate = parser.getRateFromString(result);
+			RateData rateData = new RateData(request.getDate(), rate.getMid(), request.getCurrency());
+
 			return rateData;
 		} catch (IOException | CreatingURLException e) {
-			throw new CreatingInputStringException("B³¹d przy po³¹czeniu z NBP ", e);
+			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
 		} catch (ParsingException e) {
-			throw new CreatingInputStringException("B³¹d przy po³¹czeniu z NBP ", e);
+			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
 		}
 	}
 
-	private void createConnection(LocalDate localDate) throws CreatingURLException, IOException {
-		URL url = urlCreator.createDateRateUrl(localDate);
-		createConnectionFromURL(url);
+	@Override
+	public RateData getOlderRateData(Request request) throws ReadingRateDataException {
+		this.urlCreator = new UrlCreator(request.getCurrencyCode(), parser.getFormatType());
+		try {
+			LocalDate date = findOlderExistingDate(request, request.getDate());
+			RateData rateData = null;
+			if (date != null) {
+				createConnectionFromURL(createURL(request.getDate()));
+
+				String result = createStringFromStream(connection.getInputStream());
+				connection.disconnect();
+
+				Rate rate = parser.getRateFromString(result);
+				rateData = new RateData(request.getDate(), rate.getMid(), request.getCurrency());
+			}
+			return rateData;
+		} catch (IOException | CreatingURLException e) {
+			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
+		} catch (ParsingException e) {
+			throw new ReadingRateDataException("B³¹d przy po³¹czeniu z NBP ", e);
+		}
+	}
+
+	private URL createURL(LocalDate localDate) throws CreatingURLException, IOException {
+		return urlCreator.createDateRateUrl(localDate);
 	}
 
 	private void createConnectionFromURL(URL url) throws IOException {
 		connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
-	}
-
-	private URL findExistingUrl(LocalDate localDate) throws IOException, CreatingURLException {
-		URL url = urlCreator.createDateRateUrl(localDate);
-		for (int i = 0; i < MAX_ATTEMPTS; i++) {
-			if (connectionExitst(url)) {
-				return url;
-			} else {
-				url = urlCreator.createDateRateUrl(localDate.minusDays(1));
-			}
-		}
-		return urlCreator.createLastRateUrl();
 	}
 
 	private boolean connectionExitst(URL url) throws IOException {
@@ -87,9 +98,19 @@ public class ApiConnection implements DataConnection {
 				.collect(Collectors.joining());
 	}
 
-	@Override
-	public RateData findRateData(Request request) throws CreatingInputStringException {
-		// TODO Auto-generated method stub
+	public LocalDate findOlderExistingDate(Request request, LocalDate date) {
+		for (int i = 1; i < MAX_ATTEMPTS; i++) {
+			try {
+				LocalDate newDate = date.minusDays(i);
+				if (connectionExitst(createURL(newDate))) {
+					return newDate;
+				}
+			} catch (IOException e) {
+				continue;
+			} catch (CreatingURLException e) {
+				continue;
+			}
+		}
 		return null;
 	}
 }

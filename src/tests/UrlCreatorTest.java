@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import zadanie1.connectors.UrlCreator;
 import zadanie1.enums.Currency;
-import zadanie1.exceptions.streamInputExceptions.CreatingURLException;
+import zadanie1.exceptions.dataConnectionExceptions.CreatingURLException;
 
 public class UrlCreatorTest {
 

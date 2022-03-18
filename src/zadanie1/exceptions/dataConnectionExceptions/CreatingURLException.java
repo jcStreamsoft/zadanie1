@@ -1,4 +1,4 @@
-package zadanie1.exceptions.streamInputExceptions;
+package zadanie1.exceptions.dataConnectionExceptions;
 
 public class CreatingURLException extends Exception {
 

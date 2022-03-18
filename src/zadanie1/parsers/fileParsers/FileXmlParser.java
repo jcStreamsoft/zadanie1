@@ -2,7 +2,6 @@ package zadanie1.parsers.fileParsers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -38,8 +37,8 @@ public class FileXmlParser implements FileParse {
 		return ratesTable.getRates().get(0).getMid();
 	}
 
-	private ArrayList<RatesTable> parseData(String inputString) throws JsonMappingException, JsonProcessingException {
-		return (ArrayList<RatesTable>) new XmlMapper().readValue(inputString, new TypeReference<List<RatesTable>>() {
+	private List<RatesTable> parseData(String inputString) throws JsonMappingException, JsonProcessingException {
+		return new XmlMapper().readValue(inputString, new TypeReference<List<RatesTable>>() {
 		});
 	}
 

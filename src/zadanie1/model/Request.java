@@ -7,7 +7,7 @@ import zadanie1.enums.Currency;
 
 public class Request {
 
-	private LocalDate localDate;
+	private LocalDate date;
 	private BigDecimal value;
 	private Currency currency;
 	private String dataFormat;
@@ -15,8 +15,8 @@ public class Request {
 	private Request() {
 	}
 
-	public LocalDate getLocalDate() {
-		return localDate;
+	public LocalDate getDate() {
+		return date;
 	}
 
 	public BigDecimal getValue() {
@@ -35,12 +35,16 @@ public class Request {
 		this.dataFormat = dataFormat;
 	}
 
+	public String getCurrencyCode() {
+		return this.currency.getCode();
+	}
+
 	public static Builder getBuilder(BigDecimal value, Currency currency) {
 		return new Builder(value, currency);
 	}
 
 	public static class Builder {
-		private LocalDate localDate;
+		private LocalDate date;
 		private BigDecimal value;
 		private Currency currency;
 
@@ -49,8 +53,8 @@ public class Request {
 			this.currency = currency;
 		}
 
-		public Builder localDate(LocalDate localDate) {
-			this.localDate = localDate;
+		public Builder date(LocalDate date) {
+			this.date = date;
 			return this;
 		}
 
@@ -58,10 +62,10 @@ public class Request {
 			Request request = new Request();
 			request.value = this.value;
 			request.currency = this.currency;
-			if (localDate == null) {
-				request.localDate = LocalDate.now();
+			if (date == null) {
+				request.date = LocalDate.now();
 			} else {
-				request.localDate = this.localDate;
+				request.date = this.date;
 			}
 
 			return request;
