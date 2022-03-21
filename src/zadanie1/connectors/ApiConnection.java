@@ -60,7 +60,7 @@ public class ApiConnection implements DataConnection {
 				connection.disconnect();
 
 				Rate rate = parser.getRateFromString(result);
-				rateData = new RateData(request.getDate(), rate.getMid(), request.getCurrency());
+				rateData = new RateData(date, rate.getMid(), request.getCurrency());
 			}
 			return rateData;
 		} catch (IOException | CreatingURLException e) {

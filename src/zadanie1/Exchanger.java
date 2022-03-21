@@ -56,7 +56,7 @@ public class Exchanger {
 		}
 	}
 
-	private RateData findRate(Request request) throws ReadingRateDataException {
+	public RateData findRate(Request request) throws ReadingRateDataException {
 		RateData rateData = findRateForPreciseDate(request);
 		if (rateData == null) {
 			rateData = findOlderRate(request);
