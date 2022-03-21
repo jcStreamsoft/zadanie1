@@ -18,8 +18,6 @@ public class FileConnection implements DataConnection {
 	private FileParse parser;
 	private FileReader fileReader;
 	private String filePath;
-	private static final int MAX_ATTEMPTS = 7;
-	private LocalDate newDate;
 
 	public FileConnection(FileParse parser, String filePath) {
 		this.fileReader = new FileReader(filePath);
@@ -47,14 +45,14 @@ public class FileConnection implements DataConnection {
 	}
 
 	@Override
-	public RateData getOlderRateData(Request request) throws ReadingRateDataException {
+	public RateData getRateData(Request request, LocalDate date) throws ReadingRateDataException {
 		try {
 			List<RatesTable> rates = parser.getRateFromString(fileReader.getStringFromFile());
 
-			Rate rate = findOlderDateRate(rates, request, request.getDate());
+			Rate rate = findRate(rates, request, date);
 			RateData rateData = null;
 			if (rate != null) {
-				rateData = new RateData(newDate, rate.getMid(), request.getCurrency());
+				rateData = new RateData(date, rate.getMid(), request.getCurrency());
 			}
 			return rateData;
 		} catch (IOException e) {
@@ -90,16 +88,16 @@ public class FileConnection implements DataConnection {
 		return null;
 	}
 
-	public Rate findOlderDateRate(List<RatesTable> ratesTable, Request request, LocalDate date) {
-		for (int i = 1; i < MAX_ATTEMPTS; i++) {
-			newDate = date.minusDays(i);
-			Rate rate = findRate(ratesTable, request, newDate);
-			if (rate != null) {
-				return rate;
-			}
-		}
-		return null;
-	}
+//	public Rate findOlderDateRate(List<RatesTable> ratesTable, Request request, LocalDate date) {
+//		for (int i = 1; i < MAX_ATTEMPTS; i++) {
+//			newDate = date.minusDays(i);
+//			Rate rate = findRate(ratesTable, request, newDate);
+//			if (rate != null) {
+//				return rate;
+//			}
+//		}
+//		return null;
+//	}
 
 	private boolean dateEquals(RatesTable rateTable, LocalDate date) {
 		return rateTable.getEffectiveDate().isEqual(date);

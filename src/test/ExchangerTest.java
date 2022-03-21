@@ -1,5 +1,6 @@
-package tests;
+package test;
 
+import static org.mockito.Mockito.spy;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertThrows;
 
@@ -12,11 +13,14 @@ import org.testng.annotations.Test;
 
 import zadanie1.Exchanger;
 import zadanie1.connectors.ApiConnection;
+import zadanie1.connectors.CachedConnection;
+import zadanie1.connectors.FileConnection;
 import zadanie1.enums.Currency;
 import zadanie1.exceptions.ExchangerException;
 import zadanie1.interfaces.DataConnection;
 import zadanie1.model.Request;
 import zadanie1.parsers.apiParsers.ApiJsonParser;
+import zadanie1.parsers.fileParsers.FileJsonParser;
 
 public class ExchangerTest {
 	Exchanger exchanger;
@@ -26,7 +30,7 @@ public class ExchangerTest {
 
 	@BeforeMethod
 	public void setup() {
-		List<DataConnection> connections = List.of(new ApiConnection(new ApiJsonParser()));
+		List<DataConnection> connections = List.of(new ApiConnection(new ApiJsonParser()), new CachedConnection());
 		value = new BigDecimal(1);
 		date = LocalDate.now();
 		currency = Currency.EUR;
@@ -34,7 +38,17 @@ public class ExchangerTest {
 	}
 
 	@Test
-	public void shouldReturnTrue_whenInputIsCorrectOnExchangeToPln() {
+	public void shouldReturnRateData_firstDataConnectionContainsRate() {
+		ApiConnection apiCon = new ApiConnection(new ApiJsonParser());
+		ApiConnection spyCon = spy(apiCon);
+		List<DataConnection> connections = List.of(apiCon,
+				new FileConnection(new FileJsonParser(), "fileArrayJson.txt"));
+		exchanger = new Exchanger(connections);
+		assertEquals(1, 1);
+	}
+
+	@Test
+	public void shouldReturnExpectedValue_whenInputIsCorrectOnExchangeToPln() {
 		// given
 		date = LocalDate.parse("2002-01-04");
 		value = new BigDecimal("2");

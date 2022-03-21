@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -25,7 +25,7 @@ public class CachedConnectionTest {
 		RateData expected = new RateData(date, value, currency);
 		Request request = Request.getBuilder(value, currency).date(date).build();
 		CachedConnection cache = new CachedConnection();
-		cache.saveData(expected);
+		cache.saveRateData(expected);
 		// when
 		RateData result = cache.getRateData(request);
 
@@ -43,7 +43,7 @@ public class CachedConnectionTest {
 		RateData rateData = new RateData(date, value, currency);
 		Request request = Request.getBuilder(value, currency).date(newDate).build();
 		CachedConnection cache = new CachedConnection();
-		cache.saveData(rateData);
+		cache.saveRateData(rateData);
 		// when
 		RateData result = cache.getRateData(request);
 
@@ -52,7 +52,7 @@ public class CachedConnectionTest {
 	}
 
 	@Test
-	public void shouldReturnFalse_whenFindingRequestWithNewCurrency() throws ReadingRateDataException {
+	public void shouldReturnDiffrentRateDate_whenFindingRequestWithNewCurrency() throws ReadingRateDataException {
 		// given
 		LocalDate date = LocalDate.now();
 		BigDecimal value = new BigDecimal("1");
@@ -61,7 +61,7 @@ public class CachedConnectionTest {
 		RateData rateData = new RateData(date, value, currency);
 		Request request = Request.getBuilder(value, newCurrency).date(date).build();
 		CachedConnection cache = new CachedConnection();
-		cache.saveData(rateData);
+		cache.saveRateData(rateData);
 		// when
 		RateData result = cache.getRateData(request);
 
@@ -70,7 +70,7 @@ public class CachedConnectionTest {
 	}
 
 	@Test
-	public void shouldReturnTrue_whenFindingOlderRateData() throws ReadingRateDataException {
+	public void shouldFindExpectedRateDate_whenFindingRateData() throws ReadingRateDataException {
 		// given
 		LocalDate date = LocalDate.now();
 		LocalDate olderDate = LocalDate.now().minusDays(1);
@@ -79,9 +79,9 @@ public class CachedConnectionTest {
 		RateData expected = new RateData(olderDate, value, currency);
 		Request request = Request.getBuilder(value, currency).date(date).build();
 		CachedConnection cache = new CachedConnection();
-		cache.saveData(expected);
+		cache.saveRateData(expected);
 		// when
-		RateData result = cache.getOlderRateData(request);
+		RateData result = cache.getRateData(request, olderDate);
 
 		// then
 		assertEquals(result, expected);

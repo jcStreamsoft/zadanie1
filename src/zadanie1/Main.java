@@ -39,7 +39,7 @@ public class Main {
 		nbp.exchangeToPln(request);
 		// BigDecimal result2 = nbp1.exchangeToPln(request2);
 		// System.out.println(result2);
-		nbp.printCache();
+
 		// nbp1.printCache();
 	}
 }

@@ -6,17 +6,15 @@ import java.util.Map;
 
 import zadanie1.exceptions.dataConnectionExceptions.ReadingRateDataException;
 import zadanie1.interfaces.DataConnection;
-import zadanie1.interfaces.Savable;
 import zadanie1.model.RateData;
 import zadanie1.model.Request;
 
-public class CachedConnection implements DataConnection, Savable {
+public class CachedConnection implements DataConnection {
 
 	private static final Map<String, RateData> data = new HashMap<>();
-	private static final int MAX_ATTEMPTS = 7;
 
 	@Override
-	public void saveData(RateData rateData) {
+	public void saveRateData(RateData rateData) {
 		String key = rateData.getDate() + "/" + rateData.getCurrency();
 
 		data.put(key, rateData);
@@ -30,8 +28,10 @@ public class CachedConnection implements DataConnection, Savable {
 	}
 
 	@Override
-	public RateData getOlderRateData(Request request) throws ReadingRateDataException {
-		return findOlderDateRate(request, request.getDate());
+	public RateData getRateData(Request request, LocalDate date) throws ReadingRateDataException {
+		String key = date + "/" + request.getCurrency();
+		RateData rateData = data.get(key);
+		return rateData;
 	}
 
 	public void print() {
@@ -40,16 +40,16 @@ public class CachedConnection implements DataConnection, Savable {
 		}
 	}
 
-	private RateData findOlderDateRate(Request request, LocalDate date) {
-		for (int i = 1; i < MAX_ATTEMPTS; i++) {
-			LocalDate newDate = date.minusDays(i);
-			String key = newDate + "/" + request.getCurrency();
-			System.out.println(key.toString());
-			RateData rateData = data.get(key);
-			if (rateData != null) {
-				return rateData;
-			}
-		}
-		return null;
-	}
+//	private RateData findOlderDateRate(Request request, LocalDate date) {
+//		for (int i = 1; i < MAX_ATTEMPTS; i++) {
+//			LocalDate newDate = date.minusDays(i);
+//			String key = newDate + "/" + request.getCurrency();
+//			System.out.println(key.toString());
+//			RateData rateData = data.get(key);
+//			if (rateData != null) {
+//				return rateData;
+//			}
+//		}
+//		return null;
+//	}
 }

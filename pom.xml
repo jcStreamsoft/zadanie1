@@ -17,6 +17,13 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>4.3.1</version>
+		    <scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -27,5 +34,6 @@
 			<artifactId>jackson-dataformat-xml</artifactId>
 			<version>2.11.1</version>
 		</dependency>
+
 	</dependencies>
 </project>

@@ -1,10 +1,9 @@
 package zadanie1;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
-import zadanie1.connectors.CachedConnection;
 import zadanie1.exceptions.ExchangerException;
 import zadanie1.exceptions.RateNotFoundException;
 import zadanie1.exceptions.dataConnectionExceptions.ReadingRateDataException;
@@ -19,12 +18,12 @@ import zadanie1.model.Request;
 public class Exchanger {
 	private List<DataConnection> dataConnections;
 	private CurrencyCalculator currencyCalc;
-	private static CachedConnection cache;
+	private static final int MAX_ATTEMPTS = 7;
 
 	public Exchanger(List<DataConnection> dataConnections) {
 		this.currencyCalc = new CurrencyCalculator();
 		this.dataConnections = dataConnections;
-		cache = new CachedConnection();
+
 	}
 
 	public BigDecimal exchangeToPln(Request request) {
@@ -35,9 +34,7 @@ public class Exchanger {
 			if (rateData == null) {
 				throw new RateNotFoundException("Nie znaleziono kursu dla danej daty");
 			}
-
-			cache.saveData(rateData);
-
+			saveRateData(rateData);
 			return currencyCalc.calculateToPln(request.getValue(), rateData.getRate());
 		} catch (Exception e) {
 			throw new ExchangerException("Wyst¹pi³ b³¹d.", e);
@@ -52,9 +49,7 @@ public class Exchanger {
 			if (rateData == null) {
 				throw new RateNotFoundException("Nie znaleziono kursu dla danej daty");
 			}
-
-			cache.saveData(rateData);
-
+			saveRateData(rateData);
 			return currencyCalc.calculateFromPln(request.getValue(), rateData.getRate());
 		} catch (Exception e) {
 			throw new ExchangerException("Wyst¹pi³ b³¹d.", e);
@@ -71,33 +66,41 @@ public class Exchanger {
 
 	private RateData findRateForPreciseDate(Request request) {
 		for (DataConnection dataConnection : dataConnections) {
-			;
 			try {
 				RateData rateData = dataConnection.getRateData(request);
 				if (rateData != null) {
 					return rateData;
 				}
 			} catch (ReadingRateDataException e) {
-				continue;
 			}
 		}
 		return null;
 	}
 
 	private RateData findOlderRate(Request request) {
-		List<DataConnection> lista = new ArrayList<>();
-		for (DataConnection dataConnection : lista) {
+		for (DataConnection dataConnection : dataConnections) {
 			try {
 				RateData rateData = null;
-				rateData = dataConnection.getOlderRateData(request);
-				if (rateData != null) {
-					return rateData;
+				for (int i = 0; i < MAX_ATTEMPTS; i++) {
+					LocalDate olderDate = request.getDate().minusDays(i);
+
+					rateData = dataConnection.getRateData(request, olderDate);
+
+					if (rateData != null) {
+						return rateData;
+					}
 				}
+
 			} catch (ReadingRateDataException e) {
-				continue;
 			}
 		}
 		return null;
+	}
+
+	private void saveRateData(RateData rateData) {
+		for (DataConnection dataConnection : dataConnections) {
+			dataConnection.saveRateData(rateData);
+		}
 	}
 
 	private void checkValidation(Request request)
@@ -105,9 +108,5 @@ public class Exchanger {
 		InputValidator.checkDate(request.getDate());
 		InputValidator.checkValue(request.getValue());
 		InputValidator.checkCurrency(request.getCurrency());
-	}
-
-	public void printCache() {
-		cache.print();
 	}
 }
